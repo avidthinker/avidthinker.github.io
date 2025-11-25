@@ -1,0 +1,6 @@
+article img {
+  display: block; /* let it expand */
+  max-width: 100% !important; /* scale to container */
+  width: 37em;
+  margin: 1.2em auto;
+}

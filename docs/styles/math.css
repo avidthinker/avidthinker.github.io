@@ -1,0 +1,10 @@
+article .katex-display {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 3px;
+  overflow-y: hidden;
+}
+
+.md-typeset div.arithmatex > * {
+  padding: 0;
+}

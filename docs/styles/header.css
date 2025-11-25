@@ -1,0 +1,9 @@
+body.scrolled-top .md-header {
+  transform: translateY(0);
+  transition: transform .3s ease;
+}
+
+.md-header {
+  transform: translateY(-100%);
+  transition: transform .3s ease;
+}
