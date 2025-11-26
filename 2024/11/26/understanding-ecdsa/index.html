@@ -1,0 +1,2113 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Exploring blockchain, math, and smart contracts through a security lens.">
+      
+      
+      
+        <link rel="canonical" href="https://avidthinker.github.io/2024/11/26/understanding-ecdsa/">
+      
+      
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+    
+    
+      
+        <title>Understanding ECDSA - Web3 Security Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../../styles/math.css">
+    
+      <link rel="stylesheet" href="../../../../styles/images.css">
+    
+      <link rel="stylesheet" href="../../../../styles/header.css">
+    
+      <link rel="stylesheet" href="../../../../styles/contrast.css">
+    
+      <link rel="stylesheet" href="../../../../styles/tables.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#prerequisites-and-audience" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Web3 Security Blog" class="md-header__button md-logo" aria-label="Web3 Security Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Web3 Security Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Understanding ECDSA
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/avidthinker/avidthinker.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Web3 Security Blog" class="md-nav__button md-logo" aria-label="Web3 Security Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Web3 Security Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/avidthinker/avidthinker.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Web3 Security Blog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tags
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Archive
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Archive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites-and-audience" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites and audience
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-your-typical-article" class="md-nav__link">
+    <span class="md-ellipsis">
+      Not your typical article
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modular-arithmetic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modular arithmetic
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modular arithmetic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extended-euclidean-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extended Euclidean algorithm
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extended Euclidean algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fibonacci-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fibonacci numbers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secp256k1" class="md-nav__link">
+    <span class="md-ellipsis">
+      secp256k1
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group" class="md-nav__link">
+    <span class="md-ellipsis">
+      Group
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-group-for-the-elliptic-curve" class="md-nav__link">
+    <span class="md-ellipsis">
+      A group for the elliptic curve
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A group for the elliptic curve">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#finding-the-intersection-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      Finding the intersection point
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-reflect-the-intersection-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why reflect the intersection point
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projective-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      Projective space
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Projective space">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#point-at-infinity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Point at infinity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addition-in-projective-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      Addition in projective space
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#back-to-the-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      Back to the group
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signing-a-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      Signing a message
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verifying-the-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verifying the signature
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Verifying the signature">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recovering-q" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recovering \(Q\)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signature-malleability-attack" class="md-nav__link">
+    <span class="md-ellipsis">
+      Signature malleability attack
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      The end
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../.." class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2024-11-26 00:00:00+00:00" class="md-ellipsis">November 26, 2024</time>
+                      </div>
+                    </li>
+                    
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              45 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+        <a href="../../../../tags/#tag:ecdsa" class="md-tag">ECDSA</a>
+      
+    
+      
+      
+      
+        <a href="../../../../tags/#tag:attack" class="md-tag">attack</a>
+      
+    
+      
+      
+      
+        <a href="../../../../tags/#tag:cryptography" class="md-tag">cryptography</a>
+      
+    
+      
+      
+      
+        <a href="../../../../tags/#tag:ethereum" class="md-tag">ethereum</a>
+      
+    
+      
+      
+      
+        <a href="../../../../tags/#tag:extended-euclidean-algorithm" class="md-tag">extended euclidean algorithm</a>
+      
+    
+      
+      
+      
+        <a href="../../../../tags/#tag:generating-functions" class="md-tag">generating functions</a>
+      
+    
+      
+      
+      
+        <a href="../../../../tags/#tag:signature-malleability" class="md-tag">signature malleability</a>
+      
+    
+  </nav>
+
+
+  
+  
+
+
+  <h1>Understanding ECDSA</h1>
+
+<h2 id="prerequisites-and-audience">Prerequisites and audience</h2>
+<p>In this article, we'll try to understand how <em>ECDSA</em> (Elliptic Curve Digital Signature Algorithm) works.</p>
+<p>The version I have in mind is the one used by the <em>Ethereum</em> blockchain. Since my interest lies in security, we'll also explore the <em>signature malleability attack</em>.</p>
+<p>I expect you to be familiar with <em>Public Key Cryptography</em> and how it can be used to sign messages, at least conceptually.</p>
+<p>You'll only need to know basic math, so <em>abstract algebra</em> is <em>not</em> a requirement. I'll introduce the bare minimum as we go. My exposition will be deliberately <em>unsophisticated</em>, favoring <em>ease of understanding</em> over <em>conciseness</em> and <em>elegance</em>.</p>
+<p>The reader I have in mind is someone who's dissatisfied with the many superficial or hand-wavy explanations of how ECDSA works that are floating around the internet, but, at the same time, doesn't have the time or interest to go all the way down the rabbit hole and learn cryptography in a thorough and systematic way.</p>
+<p>If you, like me, work in a field where you need to have a working knowledge of multiple disciplines, you'll probably appreciate this kind of compromise.</p>
+<p>Finally, this might also serve as an introduction to the topic before you turn to more serious and academic literature.</p>
+<!-- more -->
+<h2 id="not-your-typical-article">Not your typical article</h2>
+<p>You can think of this section as a kind of <em>disclaimer</em>.</p>
+<p>This article is the result of an exercise where I start from a vague understanding of a topic and try to connect all the dots and fill in all the gaps on my own, without relying on any external sources of information. This means no books, no LLMs, and no internet.</p>
+<p>For the exercise to be effective, it needs to be written with an audience in mind, forcing you to keep track of what you've already explained and what you can expect the reader to know. It also helps you do a better job because you feel more exposed.</p>
+<p>Have you ever gone back to something you learned in the past and realized you forgot most of it? Your knowledge has become <em>sparse</em> and all you remember are some facts disconnected from each other.</p>
+<p>Can you restore the original picture on your own?</p>
+<p>If you succeed, your final understanding will be much deeper than the one you'd have if you relied on external help such as books and notes.</p>
+<p>With this article, I go a step further and try to connect the dots with knowledge that I never had to begin with. The fact that it's possible is what makes mathematical topics so special.</p>
+<p>That should explain why <em>I</em> wrote it, but why should <em>you</em> read it?</p>
+<p>Well, you get to read something:</p>
+<ul>
+<li><em>Unusual</em>, which might pique your curiosity,</li>
+<li><em>Non-authoritative</em>, demanding your full attention and critical thinking to spot inconsistencies,</li>
+<li><em>Constructive</em> in nature, since most of the formulas and derivations have to be recreated from scratch,</li>
+<li><em>Non-standard</em>, which might or might not please you:<ul>
+<li>facts may be stated or named differently from official literature,</li>
+</ul>
+</li>
+<li><em>Naive</em>, as I observe and notice some connections for the first time,<ul>
+<li>possibly making my exposition more engaging but also less polished,</li>
+</ul>
+</li>
+<li><em>Insightful</em>, since I share some of my intuition and mental models, which is somewhat unusual in more rigorous settings.</li>
+</ul>
+<p>Your role is that of an <em>auditor</em> or <em>verifier</em>, constantly trying to find any inconsistencies and <em>non sequiturs</em> in what I produced: I'm the <em>generator</em> and you the <em>discriminator</em>. In a (constructively) <em>adversarial</em> setting, this would be an <em>iterative</em> process.</p>
+<p>It goes without saying that this article is meant to be read <em>linearly</em>, from the start.</p>
+<h2 id="modular-arithmetic">Modular arithmetic</h2>
+<p>It's all around us:</p>
+<table>
+<thead>
+<tr>
+<th>Mon</th>
+<th>Tue</th>
+<th>Wed</th>
+<th>Thu</th>
+<th>Fri</th>
+<th>Sat</th>
+<th>Sun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+<td>10</td>
+<td>11</td>
+<td>12</td>
+<td>13</td>
+</tr>
+<tr>
+<td>14</td>
+<td>15</td>
+<td>16</td>
+<td>17</td>
+<td>18</td>
+<td>19</td>
+<td>20</td>
+</tr>
+<tr>
+<td>21</td>
+<td>22</td>
+<td>23</td>
+<td>24</td>
+<td>25</td>
+<td>26</td>
+<td>27</td>
+</tr>
+<tr>
+<td>28</td>
+<td>29</td>
+<td>30</td>
+<td>31</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>If we're just interested in the day of the week, then the numbers in the same column are equivalent. What do they have in common? The fact that the difference between any two of them is always a multiple of <span class="arithmatex">\(7\)</span>:</p>
+<ul>
+<li><span class="arithmatex">\(29-8 = 21 = 3\cdot 7\)</span></li>
+<li><span class="arithmatex">\(22-15 = 7\)</span></li>
+<li><span class="arithmatex">\(31-17 = 14 = 2\cdot 7\)</span></li>
+</ul>
+<p>Since numbers in the same column are equivalent, we can represent all of them by the smallest one. Let's call it the <em>representative</em> of the column. If we do that, we end up with <span class="arithmatex">\(7\)</span> numbers:</p>
+<table>
+<thead>
+<tr>
+<th>Mon</th>
+<th>Tue</th>
+<th>Wed</th>
+<th>Thu</th>
+<th>Fri</th>
+<th>Sat</th>
+<th>Sun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>That's not ideal for a calendar, but it makes sense: we just add multiples of <span class="arithmatex">\(7\)</span> to the starting numbers to recover the missing ones.</p>
+<p>How do we get the representative from a number? For instance, what's the representative of <span class="arithmatex">\(45\)</span>? Well, <span class="arithmatex">\(45 = 3 + 7\cdot 6\)</span>, so the representative is <span class="arithmatex">\(3\)</span>. Indeed, starting from <span class="arithmatex">\(3\)</span>, we add a multiple of <span class="arithmatex">\(7\)</span> to get <span class="arithmatex">\(45\)</span>.</p>
+<p>Now what's <span class="arithmatex">\(3\)</span> with respect to <span class="arithmatex">\(45\)</span>? It's the <em>remainder</em> of <span class="arithmatex">\(45\)</span> divided by <span class="arithmatex">\(7\)</span>. We can get that number by using the <em>mod(ulo)</em> operator: <span class="arithmatex">\(45\ \mathrm{mod}\ 7 = 3\)</span>, or <code>45 % 7 == 3</code>, in many programming languages.</p>
+<p>Beware:</p>
+<ul>
+<li>In <em>JS</em>: <code>-45 % 7</code> is <span class="arithmatex">\(-3\)</span></li>
+<li>In <em>Solidity</em>: <code>-45 % 7</code> is <span class="arithmatex">\(-3\)</span></li>
+<li>In <em>Python</em>: <code>-45 % 7</code> is <span class="arithmatex">\(4\)</span></li>
+<li>In <em>Math</em>: <span class="arithmatex">\(-45\ \mathrm{mod}\ 7\)</span> is <span class="arithmatex">\(4\)</span></li>
+</ul>
+<p>Both values make sense, since they're separated by <span class="arithmatex">\(7\)</span> and, thus, in the same column, or <em>equivalence class</em>, i.e. the class of all equivalent elements. But we want the representative, so <span class="arithmatex">\(4\)</span> is preferred. Observe that <span class="arithmatex">\(-45 = -7\cdot 7 + 4\)</span>.</p>
+<p>Basically, any time we're outside the window <span class="arithmatex">\(\{0, \ldots, 6\}\)</span>, we add or subtract <span class="arithmatex">\(7\)</span> as many times as we need to land in the window.</p>
+<p>Note that <code>((n % 7) + 7) % 7</code> will give the representative in any language, since:</p>
+<ul>
+<li><code>n % 7</code> is in <span class="arithmatex">\(\{-6, -5, \ldots, 0, \ldots, 5, 6\}\)</span></li>
+<li><code>(n % 7) + 7</code> is in <span class="arithmatex">\(\{1, \ldots, 13\}\)</span></li>
+<li><code>((n % 7) + 7) % 7</code> is in <span class="arithmatex">\(\{0, \ldots, 6\}\)</span></li>
+</ul>
+<p>Observe that:</p>
+<ul>
+<li>adding <span class="arithmatex">\(7\)</span> doesn't change the equivalence class</li>
+<li><code>(x % 7) % 7</code> is just <code>x % 7</code>. This property is called <em>idempotency</em> (<em>same power</em>): reapplying the operation doesn't increase the extent of the effect, i.e. it gives the same result.</li>
+</ul>
+<p>Instead of writing mod operators everywhere, we can say that we're computing mod <span class="arithmatex">\(p\)</span>:</p>
+<div class="arithmatex">\[y^2 = x^3 + 7\ (\mathrm{mod}\ p)\]</div>
+<p>That's equivalent to</p>
+<div class="arithmatex">\[y^2\ \mathrm{mod}\ p = (x^3 + 7) \ \mathrm{mod}\ p\]</div>
+<p>which is a pain to write.</p>
+<p>If we're only dealing with addition and multiplication, then we can insert as many "mod <span class="arithmatex">\(p\)</span>" as we want wherever we want, so these two expressions are equivalent:</p>
+<ul>
+<li><span class="arithmatex">\((123456 \cdot 345678 + 876876234)\ \mathrm{mod}\ p\)</span></li>
+<li><span class="arithmatex">\([(((123456\ \mathrm{mod}\ p)\cdot (345678 \ \mathrm{mod}\ p))\ \mathrm{mod}\ p) + (876876234\ \mathrm{mod}\ p)]\ \mathrm{mod}\ p\)</span></li>
+</ul>
+<p>That's not true for exponentiation:</p>
+<ul>
+<li><span class="arithmatex">\(2^8\ \mathrm{mod}\ 7 = 4\)</span></li>
+<li><span class="arithmatex">\(2^{8\ \mathrm{mod}\ 7} = 2^1 = 2\)</span></li>
+</ul>
+<p>ECDSA doesn't rely on exponentiation, so we don't need to talk about it.</p>
+<p>We still don't know how to <em>divide</em> mod <span class="arithmatex">\(p\)</span>. That is, we don't know how to compute, say, <span class="arithmatex">\(3/4\)</span> mod <span class="arithmatex">\(p\)</span>, or whether it even exists.</p>
+<p>What does dividing by <span class="arithmatex">\(4\)</span> do? It does something that can be reversed by multiplying by <span class="arithmatex">\(4\)</span>. So the two operations cancel out and are equivalent to multiplying by <span class="arithmatex">\(1\)</span>, the <em>neutral element</em>. In other words, we must have</p>
+<div class="arithmatex">\[a / a = 1\ (\mathrm{mod}\ p)\]</div>
+<p>That's usually written as</p>
+<div class="arithmatex">\[a\cdot a^{-1} = 1\ (\mathrm{mod}\ p)\]</div>
+<p>where <span class="arithmatex">\(a^{-1}\)</span> is called the <em>multiplicative inverse</em> of <span class="arithmatex">\(a\)</span>.</p>
+<p>As an aside, the <em>additive inverse</em>, or <em>opposite</em>, is simply <span class="arithmatex">\(-n\)</span>, since <span class="arithmatex">\(n + (-n) = 0\)</span>, where <span class="arithmatex">\(0\)</span> is the neutral element of addition. Of course, we can compute <span class="arithmatex">\(-n\ \mathrm{mod}\ p\)</span> to get the representative of <span class="arithmatex">\(-n\)</span>.</p>
+<p>Let's find <span class="arithmatex">\(x\)</span> such that <span class="arithmatex">\(4\cdot x = 1\ (\mathrm{mod}\ 7)\)</span> by using simple <em>brute force</em>:</p>
+<ul>
+<li><span class="arithmatex">\(4\cdot 0 = 0\)</span></li>
+<li><span class="arithmatex">\(4\cdot 1 = 4\)</span></li>
+<li><span class="arithmatex">\(4\cdot 2 = 1\)</span></li>
+<li><span class="arithmatex">\(4\cdot 3 = 5\)</span></li>
+<li><span class="arithmatex">\(4\cdot 4 = 2\)</span></li>
+<li><span class="arithmatex">\(4\cdot 5 = 6\)</span></li>
+<li><span class="arithmatex">\(4\cdot 6 = 3\)</span></li>
+</ul>
+<p>I omitted "<span class="arithmatex">\(\left(\mathrm{mod}\ 7\right)\)</span>" for convenience. I'll do that often from now on.</p>
+<p>As we can see, <span class="arithmatex">\(4^{-1} = 2\)</span>. That's because <span class="arithmatex">\(4\cdot 2 = 8 = 8-7 = 1\)</span>.</p>
+<p>Let's go back to our <span class="arithmatex">\(3/4\)</span>:</p>
+<div class="arithmatex">\[3/4 = 3\cdot 4^{-1} = 3\cdot 2=6\]</div>
+<p>Indeed:</p>
+<div class="arithmatex">\[6\cdot 4 = 24 = 3\]</div>
+<p>so we get <span class="arithmatex">\(3\)</span> back.</p>
+<p>An important fact to know is that <strong>a number <span class="arithmatex">\(a\)</span> is always <em>invertible</em> mod <span class="arithmatex">\(p\)</span>, as long as it's <em>coprime</em> with <span class="arithmatex">\(p\)</span>, i.e. their <em>GCD</em> (greatest common divisor) is <span class="arithmatex">\(1\)</span></strong>.</p>
+<p><strong>Proof</strong> (<em>safely skippable</em>)</p>
+<p>Let's define <span class="arithmatex">\(r_x = a\cdot x\ \mathrm{mod}\ p\)</span>. Let <span class="arithmatex">\(r\)</span> be the sequence <span class="arithmatex">\(r_0, \ldots, r_{p-1}\)</span>.</p>
+<p>Again, I'll omit "mod <span class="arithmatex">\(p\)</span>" for notational convenience.</p>
+<p>If <span class="arithmatex">\(r_x = r_y\)</span>, i.e. <span class="arithmatex">\(a\cdot x = a\cdot y\)</span>, then <span class="arithmatex">\(a(x-y) = 0\)</span>, which means that <span class="arithmatex">\(a(x-y)\)</span> is divisible by <span class="arithmatex">\(p\)</span>. If <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(p\)</span> are coprime, then <span class="arithmatex">\(x-y\)</span> must be divisible by <span class="arithmatex">\(p\)</span>, so <span class="arithmatex">\(x-y = 0\)</span>, i.e. <span class="arithmatex">\(x=y\)</span>. In other words, <span class="arithmatex">\(x\neq y\)</span> implies that <span class="arithmatex">\(r_x \neq r_y\)</span>.</p>
+<p>This means that <span class="arithmatex">\(r\)</span> has <span class="arithmatex">\(p\)</span> distinct values in <span class="arithmatex">\(\{0, \ldots, p-1\}\)</span>, i.e. <span class="arithmatex">\(r\)</span> is a <em>permutation</em> of the sequence <span class="arithmatex">\(0, \ldots, p-1\)</span>. In particular, <span class="arithmatex">\(r\)</span> contains exactly one <span class="arithmatex">\(1\)</span>, so there's exactly one <span class="arithmatex">\(x\)</span> such that <span class="arithmatex">\(a\cdot x = 1\)</span>.</p>
+<p><strong>End of proof!</strong></p>
+<p>As an example, let's look again at the brute-forcing we did above to find <span class="arithmatex">\(4^{-1}\ \mathrm{mod}\ 7\)</span> and note that the results are a permutation of the numbers from <span class="arithmatex">\(0\)</span> to <span class="arithmatex">\(6\)</span>, so they contain exactly one <span class="arithmatex">\(1\)</span>. That's expected since <span class="arithmatex">\(4\)</span> and <span class="arithmatex">\(7\)</span> are coprime.</p>
+<p>Observe that when <span class="arithmatex">\(p\)</span> is prime, all numbers from <span class="arithmatex">\(1\)</span> to <span class="arithmatex">\(p-1\)</span> are coprime with it, so they're all invertible.</p>
+<p>Technically, the set of representatives <span class="arithmatex">\(0, \ldots, p-1\)</span> is often denoted by <span class="arithmatex">\(\mathbb{Z}_p\)</span> or <span class="arithmatex">\(\mathbb{Z}/p\mathbb{Z}\)</span>. It's obtained by partitioning the integers into equivalence classes (our calendar columns, but extended to all integers) and representing each class by a representative in <span class="arithmatex">\(\{0, \ldots, p-1\}\)</span>. That's what we did informally.</p>
+<h3 id="extended-euclidean-algorithm">Extended Euclidean algorithm</h3>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong><em>You can safely skip this section</em></strong>, if you already know or don't care about how the multiplicative inverse can be computed in practice. If you're interested in the method of <em>generating functions</em> you might still want to read the <a href="#fibonacci-numbers">Fibonacci numbers</a> subsection, though.</p>
+</div>
+<p>For a fast and practical way to compute the multiplicative inverse, we can use the <em>extended Euclidean algorithm</em> (EEA).</p>
+<p>The Euclidean algorithm (EA) can be used to efficiently compute <span class="arithmatex">\(\mathrm{GCD}(a, p)\)</span>, and its extended version returns two integers <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> such that</p>
+<div class="arithmatex">\[ax + py = \mathrm{GCD}(a, p)\]</div>
+<p>If <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(p\)</span> are coprime, then</p>
+<div class="arithmatex">\[
+ax + py = 1 \implies ax = 1\ (\mathrm{mod}\ p)
+\]</div>
+<p>This means that <span class="arithmatex">\(x\)</span> is the multiplicative inverse of <span class="arithmatex">\(a\)</span> mod <span class="arithmatex">\(p\)</span>.</p>
+<p>How does the algorithm work? It's very simple.</p>
+<p>The first observation is that</p>
+<div class="arithmatex">\[\mathrm{GCD}(a, b) = \mathrm{GCD}(a, b-a)\]</div>
+<p>and, by symmetry,</p>
+<div class="arithmatex">\[\mathrm{GCD}(a, b) = \mathrm{GCD}(a-b, b)\]</div>
+<p>We will prove this later.</p>
+<p>Since we can subtract repeatedly, we can also use the mod operator:</p>
+<div class="arithmatex">\[\mathrm{GCD}(a, b) = \mathrm{GCD}(a\ \mathrm{mod}\ b, b\ \mathrm{mod}\ a)\]</div>
+<p>This way, we can reduce the two arguments very quickly. Note that in a real implementation we only need one <code>mod</code> per step, since one of the two has clearly no effect.</p>
+<p>Let's use it to compute <span class="arithmatex">\(\mathrm{GCD}(784, 495)\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+(784&amp;, 495) \\
+(289&amp;, 495)&amp;\qquad\qquad 289 &amp;= 784 - 495 \\
+(289&amp;, 206)&amp;             206 &amp;= 495 - 289 \\
+ (83&amp;, 206)&amp;             83 &amp;= 289 - 206 \\
+ (83&amp;, 40) &amp;             40 &amp;= 206 - 83\cdot 2 \\
+  (3&amp;, 40) &amp;             3 &amp;= 83 - 40\cdot 2 \\
+  (3&amp;, 1)  &amp;             1 &amp;= 40 - 3\cdot 13
+\end{align*}
+\]</div>
+<p>The second column shows how we got the new values. Since we obtained <span class="arithmatex">\(\mathrm{GCD}(3, 1)\)</span>, the GCD is <span class="arithmatex">\(1\)</span>, i.e. <span class="arithmatex">\(784\)</span> and <span class="arithmatex">\(495\)</span> are coprime.</p>
+<p>The extended version of the algorithm uses the second column in a simple way. To start, we notice that the equation at the bottom of the second column is already in the right form, i.e.</p>
+<div class="arithmatex">\[40\cdot 1 + 3(-13) = 1\]</div>
+<p>However, we want the expression with respect to the initial values <span class="arithmatex">\(784\)</span> and <span class="arithmatex">\(495\)</span>.</p>
+<p>The solution is easy: we just do substitutions as we go up the second column, starting from the bottom:</p>
+<div class="arithmatex">\[
+\begin{align*}
+1 &amp;= 40 - 3\cdot 13 \\
+1 &amp;= 40 - (83 - 40\cdot 2)\cdot 13 \\
+  &amp;= 40\cdot 27 - 83\cdot 13 \\
+1 &amp;= (206 - 83\cdot 2)\cdot 27 - 83\cdot 13 \\
+  &amp;= 206\cdot 27 - 83\cdot 67 \\
+1 &amp;= 206\cdot 27 - (289 - 206)\cdot 67 \\
+  &amp;= 206\cdot 94 - 289\cdot 67 \\
+1 &amp;= (495 - 289)\cdot 94 - 289\cdot 67 \\
+  &amp;= 495\cdot 94 - 289\cdot 161 \\
+1 &amp;= 495\cdot 94 - (784 - 495)\cdot 161 \\
+  &amp;= 495\cdot 255 - 784\cdot 161 \\
+\end{align*}
+\]</div>
+<p>Indeed, <span class="arithmatex">\(495\cdot 255 - 784\cdot 161 = 1\)</span>.</p>
+<p>So now we know that <span class="arithmatex">\(495\cdot 255 = 1\ (\mathrm{mod}\ 784)\)</span>.</p>
+<p>Now, the only thing missing is to prove that</p>
+<div class="arithmatex">\[\mathrm{GCD}(a, b) = \mathrm{GCD}(a, b-a)\]</div>
+<p>Let me write <span class="arithmatex">\(a|b\)</span> to mean that <span class="arithmatex">\(a\)</span> divides <span class="arithmatex">\(b\)</span>, i.e. <span class="arithmatex">\(b = ah\)</span> for some integer <span class="arithmatex">\(h\)</span>.</p>
+<p>If two numbers divide each other, they must be equal, so we just need to prove that, for any integer <span class="arithmatex">\(k\)</span>,</p>
+<div class="arithmatex">\[\mathrm{GCD}(u, v)\mid \mathrm{GCD}(u, v+ku)\]</div>
+<p>Indeed, we can then argue that:</p>
+<ul>
+<li><span class="arithmatex">\(\mathrm{GCD}(a, b) \mid \mathrm{GCD}(a, b-a)\)</span></li>
+<li><span class="arithmatex">\(\mathrm{GCD}(a, b-a) \mid \mathrm{GCD}(a, (b-a)+a)\)</span></li>
+</ul>
+<p>Let's prove that</p>
+<div class="arithmatex">\[\mathrm{GCD}(u, v)\mid \mathrm{GCD}(u, v+ku)\]</div>
+<p>Let <span class="arithmatex">\(d_1\)</span> be the GCD on the left and <span class="arithmatex">\(d_2\)</span> the one on the right. It's clear that <span class="arithmatex">\(d_1|u\)</span> and <span class="arithmatex">\(d_1|v\)</span>, which implies that <span class="arithmatex">\(d_1|(v+ku)\)</span>. Now we'd like to conclude that <span class="arithmatex">\(d_1|d_2\)</span>.</p>
+<p>Unfortunately, we only proved that <span class="arithmatex">\(d_1\)</span> is a common divisor of <span class="arithmatex">\(u\)</span> and <span class="arithmatex">\(v+ku\)</span> so far.</p>
+<p>Let's show that <strong><em>if <span class="arithmatex">\(d'\)</span> divides both <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span>, then it also divides <span class="arithmatex">\(d = \mathrm{GCD}(a,b)\)</span></em></strong>.</p>
+<p><strong>Proof</strong> (<em>safely skippable</em>)</p>
+<p>We can always express <span class="arithmatex">\(d\)</span> and <span class="arithmatex">\(d'\)</span> as</p>
+<div class="arithmatex">\[
+\begin{cases}
+d' = u\cdot \mathrm{GCD}(d, d') \\
+d  = v\cdot \mathrm{GCD}(d, d') \\
+1 = \mathrm{GCD}(u, v)
+\end{cases}
+\]</div>
+<p>where, as indicated, <span class="arithmatex">\(u\)</span> and <span class="arithmatex">\(v\)</span> are coprime.</p>
+<p>Observe that if <span class="arithmatex">\(u\)</span> and <span class="arithmatex">\(v\)</span> weren't coprime, their common divisor would be absorbed by <span class="arithmatex">\(\mathrm{GCD}(d, d')\)</span>, so we'd have the same situation as above but for <span class="arithmatex">\(u'=u/\mathrm{GCD}(u,v)\)</span> and <span class="arithmatex">\(v'=v/\mathrm{GCD}(u,v)\)</span>.</p>
+<p>Since <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> are divisible by both <span class="arithmatex">\(d'\)</span> and <span class="arithmatex">\(d\)</span>, then <span class="arithmatex">\(a' = a/\mathrm{GCD}(d, d')\)</span> and <span class="arithmatex">\(b' = b/\mathrm{GCD}(d, d')\)</span> must still be divisible by <span class="arithmatex">\(u\)</span> and <span class="arithmatex">\(v\)</span>. So:</p>
+<ul>
+<li><span class="arithmatex">\(u k_1 = a' = v k_2\)</span></li>
+<li><span class="arithmatex">\(u h_1 = b' = v h_2\)</span></li>
+</ul>
+<p>for some integers <span class="arithmatex">\(k_1\)</span>, <span class="arithmatex">\(k_2\)</span>, <span class="arithmatex">\(h_1\)</span>, and <span class="arithmatex">\(h_2\)</span>.</p>
+<p>Since <span class="arithmatex">\(u\)</span> and <span class="arithmatex">\(v\)</span> are coprime, then <span class="arithmatex">\(u|k_2\)</span> and <span class="arithmatex">\(u|h_2\)</span>, i.e. <span class="arithmatex">\(k_2 = u k_3\)</span> and <span class="arithmatex">\(h_2 = u h_3\)</span> for some integers <span class="arithmatex">\(k_3\)</span> and <span class="arithmatex">\(h_3\)</span>. Therefore:</p>
+<ul>
+<li><span class="arithmatex">\(a' = uv k_3\implies a = uv \mathrm{GCD}(d, d') k_3 = ud k_3\)</span></li>
+<li><span class="arithmatex">\(b' = uv h_3\implies b = uv \mathrm{GCD}(d, d') h_3 = ud h_3\)</span></li>
+</ul>
+<p>This means that <span class="arithmatex">\(ud\)</span> is a common divisor of <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span>, and <span class="arithmatex">\(u&gt;1\)</span> would imply that we found a greater divisor than <span class="arithmatex">\(d\)</span>, their GCD.</p>
+<p>Since <span class="arithmatex">\(u = 1\)</span>, then <span class="arithmatex">\(d' = \mathrm{GCD}(d, d')\)</span>, i.e. <span class="arithmatex">\(d'|d\)</span>.</p>
+<p><strong>End of proof!</strong></p>
+<p>I seem to recall that some people include this property in the definition of the GCD itself, but I think that's slightly redundant.</p>
+<p>Anyway, we're done!</p>
+<p>Wait! How fast is this algorithm? Let's look at the reduction again:</p>
+<div class="arithmatex">\[
+\begin{align*}
+({\color{red} 784}&amp;, {\color{green}495}) \\
+({\color{green}289}&amp;, {\color{red} 495})&amp;\qquad\qquad 289 &amp;= 784 - 495 \\
+({\color{red} 289}&amp;, {\color{green}206})&amp;             206 &amp;= 495 - 289 \\
+ ({\color{green}83}&amp;, {\color{red} 206})&amp;             83 &amp;= 289 - 206 \\
+ ({\color{red} 83}&amp;, {\color{green}40}) &amp;             40 &amp;= 206 - 83\cdot 2 \\
+  ({\color{green}3}&amp;, {\color{red} 40}) &amp;             3 &amp;= 83 - 40\cdot 2 \\
+  ({\color{red} 3}&amp;, {\color{green}1})  &amp;             1 &amp;= 40 - 3\cdot 13
+\end{align*}
+\]</div>
+<p>I can see two <em>super Fibonacci sequences</em>. Here's the green one:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>Green Seq.</strong></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;"><strong>40</strong></td>
+<td style="text-align: center;"><strong>83</strong></td>
+<td style="text-align: center;"><strong>206</strong></td>
+<td style="text-align: center;">289</td>
+<td style="text-align: center;">495</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Green Mult.</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+<p>Fibonacci numbers form a sequence <span class="arithmatex">\(F_0, F_1, F_2, \ldots\)</span> where the <em>recurrence relation</em> is <span class="arithmatex">\(F_i=F_{i-2}+F_{i-1}\)</span>, for <span class="arithmatex">\(i=2, 3, \ldots\)</span>.</p>
+<p>In our case, however, the <em>recurrence relation</em> is <span class="arithmatex">\(F_i = F_{i-2}+F_{i-1}\cdot M_{i-1}\)</span>, where <span class="arithmatex">\(F\)</span> is on the first row and <span class="arithmatex">\(M\)</span> on the second row of the table.</p>
+<p>As an example, I highlighted 4 elements in the table: <span class="arithmatex">\(206 = 40 + 83\cdot 2\)</span>. I call this a <em>super</em> Fibonacci sequence because the multipliers make it grow faster than the regular one (corresponding to all <span class="arithmatex">\(M_i=1\)</span>).</p>
+<p>Fibonacci numbers grow exponentially, so the number of steps necessary to reach a number <span class="arithmatex">\(n\)</span> is <span class="arithmatex">\(\Theta(\log n)\)</span>.</p>
+<p>Since our sequence is even faster, the number of steps is lower and all we can say for now is that the worst-case complexity of EEA is <span class="arithmatex">\(O(\log n)\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Technically, <span class="arithmatex">\(\Theta\)</span> denotes <em>exact growth</em>, <span class="arithmatex">\(O\)</span> denotes an <em>upper bound</em>, and <span class="arithmatex">\(\Omega\)</span> denotes a <em>lower bound</em>.</p>
+<p>For instance, <span class="arithmatex">\(n = O(n^2)\)</span> is correct, though in practice people often use <span class="arithmatex">\(O\)</span> when they really mean <span class="arithmatex">\(\Theta\)</span>.</p>
+<p>Moreover, <span class="arithmatex">\(n = O(n^2)\)</span> really means <span class="arithmatex">\(n \in O(n^2)\)</span>, but the former denotation is more common than the latter.</p>
+</div>
+<p>Can we think of a very slow sequence? But, of course! We can build it starting from the bottom and always choosing <span class="arithmatex">\(M_i=1\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+\cdots\ &amp; \cdots \\
+({\color{red} 34}&amp;, {\color{green}55}) \\
+({\color{red} 34}&amp;, {\color{green}21})&amp;\qquad\qquad 21 &amp;= 55 - 34 \\
+({\color{green}13}&amp;, {\color{red} 21})&amp;             13 &amp;= 34 - 21 \\
+({\color{red} 13}&amp;, {\color{green}8})&amp;              8 &amp;= 21 - 13 \\
+ ({\color{green}5}&amp;, {\color{red}8})&amp;               5 &amp;= 13 - 8 \\
+ ({\color{red} 5}&amp;, {\color{green}3})&amp;              3 &amp;= 8 - 5 \\
+  ({\color{green}2}&amp;, {\color{red} 3})&amp;             2 &amp;= 5 - 3 \\
+  ({\color{red} 2}&amp;, {\color{green}1})&amp;             1 &amp;= 3 - 2
+\end{align*}
+\]</div>
+<p>Those are basically two Fibonacci sequences! This tells us that the worst case of the EEA is indeed logarithmic or, to be precise, <span class="arithmatex">\(\Theta(\log (\min\{a, b\}))\)</span>. Why <em>min</em>? Because we have two sequences: the green and the red one. Since they start and end together, the faster one dominates the other and faster growth means shorter sequence, so the time complexity is <span class="arithmatex">\(\Theta(\min\{\log a, \log b\})\)</span>, i.e. <span class="arithmatex">\(\Theta(\log (\min\{a, b\}))\)</span>.</p>
+<p>I had no idea that the EA had such a connection with the Fibonacci numbers before writing this section. As always, check my reasoning!</p>
+<h4 id="fibonacci-numbers">Fibonacci numbers</h4>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong><em>You can safely skip this section</em></strong>. You don't need it for the rest of the article, but if you want to learn about <em>generating functions</em>, I think this is a good opportunity.</p>
+</div>
+<p>I want to find the <em>base</em> for the logarithm that appears in the time complexity of the EA and EEA algorithms.</p>
+<p>If we assume that Fibonacci numbers grow <em>exponentially</em>, i.e. <span class="arithmatex">\(F_i\sim b^i\)</span>, then:</p>
+<div class="arithmatex">\[
+\begin{align*}
+F_{i+2} &amp;= F_{i+1} + F_i \\
+&amp;\hspace{10pt}\Downarrow \\
+b^{i+2} &amp;= b^{i+1} + b^i
+\end{align*}
+\]</div>
+<p>We divide by <span class="arithmatex">\(b^i\)</span> and get <span class="arithmatex">\(b^2-b-1 = 0\)</span>, whose positive solution is</p>
+<div class="arithmatex">\[b_+ = \frac{1 + \sqrt{5}}{2} \approx 1.618\]</div>
+<p>That's the well-known <em>golden ratio</em>.</p>
+<p>We started from the assumption that the growth is exponential, but what's the exact expression for the <span class="arithmatex">\(n\)</span>-th Fibonacci number, just to make sure we're correct?</p>
+<p>Let <span class="arithmatex">\(V_0\)</span> be the vector of Fibonacci numbers <span class="arithmatex">\(F_i\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><span class="arithmatex">\(V_0:\)</span></strong></td>
+<td><span class="arithmatex">\(F_0\)</span></td>
+<td><span class="arithmatex">\(F_1\)</span></td>
+<td><span class="arithmatex">\(F_2\)</span></td>
+<td><span class="arithmatex">\(F_3\)</span></td>
+<td><span class="arithmatex">\(F_4\)</span></td>
+<td><span class="arithmatex">\(F_5\)</span></td>
+<td><span class="arithmatex">\(F_6\)</span></td>
+<td><span class="arithmatex">\(\ldots\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Now let's introduce the two shifted versions <span class="arithmatex">\(V_1\)</span> and <span class="arithmatex">\(V_2\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><span class="arithmatex">\(V_0:\)</span></strong></td>
+<td><span class="arithmatex">\(F_0\)</span></td>
+<td><span class="arithmatex">\(F_1\)</span></td>
+<td><span class="arithmatex">\(F_2\)</span></td>
+<td><span class="arithmatex">\(F_3\)</span></td>
+<td><span class="arithmatex">\(F_4\)</span></td>
+<td><span class="arithmatex">\(F_5\)</span></td>
+<td><span class="arithmatex">\(F_6\)</span></td>
+<td><span class="arithmatex">\(\ldots\)</span></td>
+</tr>
+<tr>
+<td><strong><span class="arithmatex">\(V_1:\)</span></strong></td>
+<td></td>
+<td><span class="arithmatex">\(F_0\)</span></td>
+<td><span class="arithmatex">\(F_1\)</span></td>
+<td><span class="arithmatex">\(F_2\)</span></td>
+<td><span class="arithmatex">\(F_3\)</span></td>
+<td><span class="arithmatex">\(F_4\)</span></td>
+<td><span class="arithmatex">\(F_5\)</span></td>
+<td><span class="arithmatex">\(\ldots\)</span></td>
+</tr>
+<tr>
+<td><strong><span class="arithmatex">\(V_2:\)</span></strong></td>
+<td></td>
+<td></td>
+<td><span class="arithmatex">\(F_0\)</span></td>
+<td><span class="arithmatex">\(F_1\)</span></td>
+<td><span class="arithmatex">\(F_2\)</span></td>
+<td><span class="arithmatex">\(F_3\)</span></td>
+<td><span class="arithmatex">\(F_4\)</span></td>
+<td><span class="arithmatex">\(\ldots\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>We can see that, from the third column onward, <span class="arithmatex">\(V_0 = V_1 + V_2\)</span>, because of the relation <span class="arithmatex">\(F_{i+2} = F_{i+1} + F_{i}\)</span>.</p>
+<p>The advantage of the vector approach is that we don't have to deal with the index <span class="arithmatex">\(i\)</span> anymore. In a sense, we <em>vectorized</em> the loop and abstracted away the annoying index. The drawback is that we lost some <em>algebraic power</em> because, unless we introduce other operations, we don't even know how to express the fact that <span class="arithmatex">\(V_1\)</span> is a shifted version of <span class="arithmatex">\(V_0\)</span>.</p>
+<p>Instead of reinventing the wheel, why don't we use a <em>power series</em> instead of a simple vector? I'm thinking of something like this:</p>
+<div class="arithmatex">\[
+\begin{align*}
+P_0(x) &amp;= F_0 + F_1 x + F_2 x^2 + F_3 x^3 + F_4 x^4 + F_5 x^5 + \ldots \\
+P_1(x) &amp;= \phantom{F_0 +} F_0 x + F_1 x^2 + F_2 x^3 + F_3 x^4 + F_4 x^5 + \ldots \\
+P_2(x) &amp;= \phantom{F_0 + F_1 x +} F_0 x^2 + F_1 x^3 + F_2 x^4 + F_3 x^5 + \ldots \\
+\end{align*}
+\]</div>
+<p>The individual elements are kept separated thanks to the different powers of <span class="arithmatex">\(x\)</span>, and we inherit lots of algebraic properties from power series!</p>
+<p>For instance, it's easy to see that <span class="arithmatex">\(P_1(x) = x P_0(x)\)</span> and <span class="arithmatex">\(P_2(x) = x^2 P_0(x)\)</span>.</p>
+<p>Moreover, we can state algebraically what we observed before:</p>
+<blockquote>
+<p>We can see that, from the third column onward, <span class="arithmatex">\(V_0 = V_1 + V_2\)</span>, because of the relation <span class="arithmatex">\(F_{i+2} = F_{i+1} + F_{i}\)</span>.</p>
+</blockquote>
+<p>With power series, that becomes</p>
+<div class="arithmatex">\[
+P_0(x) - F_0 - F_1 x = P_1(x) - F_0 x + P_2(x)
+\]</div>
+<p>Note that we simply removed the unwanted terms in the first two columns:</p>
+<div class="arithmatex">\[
+\begin{align*}
+P_0(x) - F_0 - F_1 x &amp;= F_2 x^2 + F_3 x^3 + F_4 x^4 + F_5 x^5 + \ldots \\
+P_1(x) - F_0 x &amp;= F_1 x^2 + F_2 x^3 + F_3 x^4 + F_4 x^5 + \ldots \\
+P_2(x) &amp;= F_0 x^2 + F_1 x^3 + F_2 x^4 + F_3 x^5 + \ldots \\
+\end{align*}
+\]</div>
+<p>To reiterate, we expressed all the following relations at once:</p>
+<ul>
+<li><span class="arithmatex">\(F_2 = F_1 + F_0\)</span></li>
+<li><span class="arithmatex">\(F_3 = F_2 + F_1\)</span></li>
+<li><span class="arithmatex">\(F_4 = F_3 + F_2\)</span></li>
+<li><span class="arithmatex">\(\ldots\)</span></li>
+</ul>
+<p>We can now express <span class="arithmatex">\(P_1\)</span> and <span class="arithmatex">\(P_2\)</span> in terms of <span class="arithmatex">\(P_0\)</span>. For convenience, let's write <span class="arithmatex">\(P\)</span> instead of <span class="arithmatex">\(P_0(x)\)</span>:</p>
+<div class="arithmatex">\[
+P - F_0 - F_1 x = x P - F_0 x + x^2 P
+\]</div>
+<p>Now we solve for <span class="arithmatex">\(P\)</span>:</p>
+<div class="arithmatex">\[
+P = \frac{(F_0 - F_1)x - F_0}{x^2 + x - 1}
+\]</div>
+<p>Since Fibonacci numbers start with <span class="arithmatex">\(0\)</span> and <span class="arithmatex">\(1\)</span>, let's substitute <span class="arithmatex">\(F_0=0\)</span> and <span class="arithmatex">\(F_1=1\)</span>:</p>
+<div class="arithmatex">\[
+P = \frac{-x}{x^2 + x - 1}
+\]</div>
+<p>That's in <em>implicit</em> form. If we can put <span class="arithmatex">\(P\)</span> in <em>explicit</em> form, then we can read the expression for the generic coefficient of <span class="arithmatex">\(x^i\)</span>, which, by construction, is the <span class="arithmatex">\(i\)</span>-th Fibonacci number! Here's the form we want:</p>
+<div class="arithmatex">\[
+P(x) = \sum_{i=0}^\infty \alpha_i x^i
+\]</div>
+<p>The coefficient <span class="arithmatex">\(\alpha_i\)</span> is bound to be a generic expression for <span class="arithmatex">\(F_i\)</span>.</p>
+<p>How do we do that?</p>
+<p>Let's take the simplest power series we can think of and find both the explicit and implicit forms for it:</p>
+<div class="arithmatex">\[
+S(x) = 1 + x + x^2 + x^3 + x^4 + \ldots
+\]</div>
+<p>We can use the same trick, i.e. the <em>shift</em>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+S(x) &amp;= 1 + x + x^2 + x^3 + x^4 + x^5 + \ldots \\
+xS(x) &amp;= \phantom{1 +} x + x^2 + x^3 + x^4 + x^5 + \ldots \\
+S(x) - xS(x) &amp;= 1
+\end{align*}
+\]</div>
+<p>Maybe surprisingly:</p>
+<div class="arithmatex">\[
+\begin{gather*}
+S(x) - xS(x) = 1 &amp;\implies \\
+(1 - x) S(x) = 1 &amp;\implies \\
+S(x) = \frac{1}{1 - x}
+\end{gather*}
+\]</div>
+<p>Written more formally, we proved that</p>
+<div class="arithmatex">\[
+\sum_{i=0}^\infty x^i = \frac{1}{1-x}
+\]</div>
+<p>We don't care about <em>convergence</em>, as we only want to read the coefficients of the <em>series</em>. As long as what we do is algebraically correct, we should be fine. We might say that we're repurposing some algebraic machinery to do "something else".</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We say a series <em>converges</em> if it evaluates to a real number. Otherwise, we say it <em>diverges</em>.
+For instance, the following series clearly converges:
+$$
+\sum_{i=0}^\infty \left(\frac{1}{10}\right)^i = 1 + 0.1 + 0.01 + \ldots = 1.1111\ldots
+$$</p>
+</div>
+<p>In the Fibonacci case, we want to find <span class="arithmatex">\(\alpha_i\)</span> such that</p>
+<div class="arithmatex">\[
+\sum_{i=0}^\infty \alpha_i x^i = \frac{-x}{x^2 + x - 1}
+\]</div>
+<p>Now that we've witnessed how the simple case works, we should have more confidence that this method might just work! It might still look like magic, though.</p>
+<p>How do we close the gap between the simple case and the Fibonacci case?</p>
+<p>First, we notice that the denominator is factorizable:</p>
+<div class="arithmatex">\[
+P = \frac{-x}{(x - c_1)(x - c_2)}
+\]</div>
+<p>where</p>
+<div class="arithmatex">\[
+\begin{align*}
+c_1 &amp;= \frac{-1 + \sqrt5}{2} \\
+c_2 &amp;= \frac{-1 - \sqrt5}{2}
+\end{align*}
+\]</div>
+<p>These are the same solutions we found for <span class="arithmatex">\(b\)</span> at the start of this section, but multiplied by <span class="arithmatex">\(-1\)</span>.</p>
+<p>Now we can split the expression into two simpler ones:</p>
+<div class="arithmatex">\[
+\frac{-x}{(x - c_1)(x - c_2)} = \frac{A}{x - c_1} + \frac{B}{x - c_2}
+\]</div>
+<p>We just need to find the appropriate <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> to get <span class="arithmatex">\(-x\)</span> at the numerator:</p>
+<div class="arithmatex">\[
+\begin{gather*}
+  \frac{A}{x - c_1} + \frac{B}{x - c_2} =\\
+  \frac{A(x-c_2) + B(x-c_1)}{(x-c_1)(x-c_2)} =\\
+  \frac{x(A+B) - c_2 A - c_1 B}{(x-c_1)(x-c_2)}
+\end{gather*}
+\]</div>
+<p>We want <span class="arithmatex">\(-x = x(A+B) - c_2 A - c_1 B\)</span>, so we must have</p>
+<div class="arithmatex">\[
+\begin{cases}
+A+B = -1 \\
+c_2 A + c_1 B = 0
+\end{cases}
+\]</div>
+<p>The solutions are</p>
+<div class="arithmatex">\[
+\begin{align*}
+A = \frac{-c_1}{c_1-c_2} \\
+B = \frac{c_2}{c_1-c_2}
+\end{align*}
+\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[
+(c_1-c_2) P = - \frac{c_1}{x - c_1} + \frac{c_2}{x - c_2}
+\]</div>
+<p>If we can convert each of the two parts into explicit form, then we're done, since explicit forms sum nicely: we just sum the corresponding coefficients.</p>
+<p>Now we divide numerator and denominator of the left part by <span class="arithmatex">\(c_1\)</span> and of the right part by <span class="arithmatex">\(c_2\)</span>:</p>
+<div class="arithmatex">\[
+(c_1-c_2) P = - \frac{1}{\frac{x}{c_1} - 1} + \frac{1}{\frac{x}{c_2} - 1}
+\]</div>
+<p>We change some signs:</p>
+<div class="arithmatex">\[
+(c_1-c_2) P = \frac{1}{1 - \frac{x}{c_1}} - \frac{1}{1 - \frac{x}{c_2}}
+\]</div>
+<p>Success:</p>
+<div class="arithmatex">\[
+(c_1-c_2) P =
+  \left(
+    \sum_{i=0}^\infty \left(\frac{x}{c_1}\right)^i
+  \right) - \left(
+    \sum_{i=0}^\infty \left(\frac{x}{c_2}\right)^i
+  \right)
+\]</div>
+<p>Expanding and simplifying:</p>
+<div class="arithmatex">\[
+(c_1-c_2)P = \sum_{i=0}^\infty \left(\frac{1}{c_1^i} - \frac{1}{c_2^i}  \right)x^i =
+\sum_{i=0}^\infty \frac{c_2^i-c_1^i}{c_1^i c_2^i} x^i
+\]</div>
+<p>We can simplify it further, since <span class="arithmatex">\(c_1 c_2 = -1\)</span> and <span class="arithmatex">\(c_1 - c_2 = \sqrt5\)</span>:</p>
+<div class="arithmatex">\[
+P = \sum_{i=0}^\infty (-1)^i \frac{c_2^i-c_1^i}{\sqrt5} x^i
+\]</div>
+<p>At last:</p>
+<div class="arithmatex">\[
+F_i = (-1)^i \frac{c_2^i-c_1^i}{\sqrt5}
+\]</div>
+<p>with</p>
+<div class="arithmatex">\[
+\begin{align*}
+c_1 &amp;= \frac{-1 + \sqrt5}{2} \\
+c_2 &amp;= \frac{-1 - \sqrt5}{2}
+\end{align*}
+\]</div>
+<p>Let's check this with the simplest and dumbest Python code possible:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">sqrt</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">s5</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">c1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">s5</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">c2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">-</span> <span class="n">s5</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>
+<a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">fib</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+<a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>    <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="n">c2</span><span class="o">**</span><span class="n">i</span> <span class="o">-</span> <span class="n">c1</span><span class="o">**</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">s5</span>
+<a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>
+<a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">fib</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)]</span>
+</code></pre></div>
+<p>Fingers crossed:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181]
+</code></pre></div>
+<p>Phew...</p>
+<p>If we substitute <span class="arithmatex">\(c_1\)</span> and <span class="arithmatex">\(c_2\)</span> in the formula, we get</p>
+<div class="arithmatex">\[
+F_i = \frac{(1+\sqrt5)^i-(1-\sqrt5)^i}{2^i\sqrt5}
+\]</div>
+<p>We obtained the same solutions we found for <span class="arithmatex">\(b\)</span>, and we get the same asymptotic growth as well.</p>
+<p>Indeed, the numerator grows as <span class="arithmatex">\((1+\sqrt5)^i\)</span>:</p>
+<div class="arithmatex">\[
+\lim_{i\to\infty} \frac{(1+\sqrt5)^i-(1-\sqrt5)^i}{(1+\sqrt5)^i} =
+  \lim_{i\to\infty} \left(1 - \left(\frac{1 - \sqrt5}{1 + \sqrt5}\right)^i\right) = 1
+\]</div>
+<p>So, <span class="arithmatex">\(F_i \sim \frac{\phi^i}{\sqrt5} = \Theta(\phi^i)\)</span>, where <span class="arithmatex">\(\phi = \frac{1+\sqrt5}{2}\)</span>.</p>
+<p>By the way, <span class="arithmatex">\(P(x) = \sum_{i=0}^\infty F_i x^i\)</span> is called a <em>generating function</em>.</p>
+<h2 id="secp256k1">secp256k1</h2>
+<p>Ethereum's ECDSA uses the elliptic curve <em>secp256k1</em>, defined as</p>
+<div class="arithmatex">\[y^2 = x^3 + 7\ (\mathrm{mod}\ p)\]</div>
+<p>where <span class="arithmatex">\(p\)</span> is a very big prime number.</p>
+<p>Here's what the continuous version (i.e. without mod) of the curve looks like:</p>
+<p><img alt="elliptic curve" src="../../../../ECDSA/__generated__/ec.svg"/></p>
+<p>The continuous elliptic curve is the set of all points <span class="arithmatex">\((x, y)\)</span> in the plane such that <span class="arithmatex">\(y^2 = x^3 + 7\)</span>. Because <span class="arithmatex">\(y\)</span> is squared, the curve is symmetric about the X-axis, i.e. <span class="arithmatex">\((x, y)\)</span> is on the curve if and only if <span class="arithmatex">\((x, -y)\)</span> is.</p>
+<p>When we switch to mod <span class="arithmatex">\(p\)</span>, things get complicated:</p>
+<p><img alt="elliptic curve mod p" src="../../../../ECDSA/__generated__/ec_mod_p.svg"/></p>
+<p>To draw that picture I used <span class="arithmatex">\(p = 97\)</span>, a small prime. The blue line is the continuous curve, while the dots are the solutions in <span class="arithmatex">\(\mathbb{Z}_p\times\mathbb{Z}_p\)</span>. Note that those solutions are always finitely many because they lie on a <span class="arithmatex">\(p\times p\)</span> grid.</p>
+<p>This figure only shows the upper right part (1st quadrant) of the previous one, so we can't see the symmetry of the continuous curve. Yet, the points in <span class="arithmatex">\(\mathbb{Z}_p\times\mathbb{Z}_p\)</span> show a new symmetry: they're reflected across the horizontal line <span class="arithmatex">\(y = p/2\)</span>. That makes sense:</p>
+<ul>
+<li><span class="arithmatex">\((x, y)\)</span> lies on the continuous curve if and only if <span class="arithmatex">\((x, -y)\)</span> also lies on it.</li>
+<li>If <span class="arithmatex">\(y\in\mathbb{Z}_p\)</span>, then <span class="arithmatex">\(-y = p-y\)</span>.</li>
+<li>This means that <span class="arithmatex">\((x, y)\)</span> lies on the mod curve if and only if <span class="arithmatex">\((x, p-y)\)</span> also lies on it.</li>
+<li><span class="arithmatex">\(y = p-y\)</span> gives us <span class="arithmatex">\(y = p/2\)</span>. In the figure the axis of symmetry is <span class="arithmatex">\(y = 97/2 = 48.5\)</span>.</li>
+</ul>
+<p>Let's plot the negative solutions as well:</p>
+<p><img alt="elliptic curve mod p with both positive and negative y" src="../../../../ECDSA/__generated__/ec_mod_p_both_y.svg"/></p>
+<p>As we can see, the part above is identical to the part below, since adding <span class="arithmatex">\(p\)</span> or <span class="arithmatex">\(-p\)</span> to a coordinate doesn't change anything mod <span class="arithmatex">\(p\)</span>.</p>
+<h2 id="group">Group</h2>
+<p>A group <span class="arithmatex">\(G\)</span> is a set of elements equipped with a binary operation, <span class="arithmatex">\(+\)</span>, such that:</p>
+<ul>
+<li>For any elements <span class="arithmatex">\(a, b\in G\)</span>, we must have <span class="arithmatex">\(a+b \in G\)</span>.</li>
+<li>There's a <em>neutral element</em>, or <em>identity</em>, <span class="arithmatex">\(0\)</span>, so that <span class="arithmatex">\(a+0 = 0+a = a\)</span> for every <span class="arithmatex">\(a\in G\)</span>.</li>
+<li>For every <span class="arithmatex">\(a\in G\)</span>, there exists an <em>additive inverse</em>, or <em>opposite</em>, of <span class="arithmatex">\(a\)</span>, denoted as <span class="arithmatex">\(-a\)</span>, such that <span class="arithmatex">\(a+(-a) = (-a)+a = 0\)</span>.<ul>
+<li>Note: <span class="arithmatex">\(a+(-b)\)</span> can also be written as <span class="arithmatex">\(a-b\)</span>.</li>
+</ul>
+</li>
+<li>We also want <em>associativity</em>, i.e., for all <span class="arithmatex">\(a,b,c\in G\)</span>, we must have <span class="arithmatex">\(a + (b+c) = (a+b) + c\)</span>. So, we can drop the parentheses and write <span class="arithmatex">\(a+b+c\)</span>.</li>
+</ul>
+<p>If for all <span class="arithmatex">\(a, b\in G\)</span> we have <span class="arithmatex">\(a+b = b+a\)</span>, then <span class="arithmatex">\(G\)</span> is <em>abelian</em> or <em>commutative</em>.</p>
+<p>Notice that we can't have two distinct identities <span class="arithmatex">\(0_1 \neq 0_2\)</span>, since</p>
+<div class="arithmatex">\[0_1 = 0_1+0_2 = 0_2\]</div>
+<p>Let's break it down:</p>
+<ul>
+<li><span class="arithmatex">\(0_1+0_2\)</span> can be simplified in two ways:<ul>
+<li>Since <span class="arithmatex">\(0_1\)</span> is an identity, then it disappears, so <span class="arithmatex">\(0_1+0_2 = 0_2\)</span></li>
+<li>Since <span class="arithmatex">\(0_2\)</span> is an identity, then it disappears, so <span class="arithmatex">\(0_1+0_2 = 0_1\)</span></li>
+</ul>
+</li>
+</ul>
+<p>Therefore, the two identities must be equal.</p>
+<p>The same goes for the additive inverse. If <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> are opposites of <span class="arithmatex">\(a\)</span> then:</p>
+<div class="arithmatex">\[
+\begin{align*}
+a+x &amp;= 0 \\
+a+y &amp;= 0
+\end{align*}
+\]</div>
+<p>That means that:</p>
+<div class="arithmatex">\[
+\begin{align*}
+a+x &amp;= a+y &amp;\implies \\
+x+(a+x) &amp;= x+(a+y) &amp;\implies \\
+(x+a)+x &amp;= (x+a)+y &amp;\implies \\
+0+x &amp;= 0+y &amp;\implies \\
+x &amp;= y
+\end{align*}
+\]</div>
+<p>So there's only one inverse per element.</p>
+<p>Given a subset <span class="arithmatex">\(S\)</span> of elements from <span class="arithmatex">\(G\)</span>, we can define the subgroup <span class="arithmatex">\(G_S\)</span> of <span class="arithmatex">\(G\)</span> generated by <span class="arithmatex">\(S\)</span> as the smallest group that includes all the elements of <span class="arithmatex">\(S\)</span>. We say that <span class="arithmatex">\(S\)</span> is a <em>generator</em> of <span class="arithmatex">\(G_S\)</span>.</p>
+<p>In this article we'll only describe in detail the case where <span class="arithmatex">\(S\)</span> has just one element. For simplicity, we'll use the same symbol for the subgroup and its generator, so a generator <span class="arithmatex">\(G\)</span> generates the (sub)group <span class="arithmatex">\(G\)</span> defined as follows:</p>
+<div class="arithmatex">\[G = \{0, G, G+G, G+G+G, G+G+G+G, \ldots\}\]</div>
+<p>That's very cumbersome to read and write, so let's define</p>
+<div class="arithmatex">\[nG = G_1 + G_2 + \cdots + G_n,\ \mathrm{where}\ G_1 = G_2 = \cdots = G_n = G\]</div>
+<p>Now we can rewrite the definition as</p>
+<div class="arithmatex">\[G = \{0, G, 2G, 3G, 4G, \ldots\}\]</div>
+<p>or even</p>
+<div class="arithmatex">\[G = \{0G, 1G, 2G, 3G, 4G, \ldots\}\]</div>
+<p>where we define <span class="arithmatex">\(0G = 0\)</span>.</p>
+<h2 id="a-group-for-the-elliptic-curve">A group for the elliptic curve</h2>
+<p>ECDSA defines a group over the points on the curve mod <span class="arithmatex">\(p\)</span>. To do that, we first need to define an addition between points.</p>
+<p>Here's how it's done on the continuous version of the elliptic curve:</p>
+<p><img alt="sum of two points on elliptic curve" src="../../../../ECDSA/__generated__/ec_sum.svg"/></p>
+<p>If <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> are two points on the curve, then <span class="arithmatex">\(P+Q\)</span> is the reflection across the X-axis of the intersection between the curve and the line passing through <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span>.</p>
+<p>Note that if <span class="arithmatex">\(R = (x, y)\)</span>, then <span class="arithmatex">\(-R = (x, -y)\)</span>. The names we chose suggest that <span class="arithmatex">\(R + (-R) = 0\)</span>, which is correct.</p>
+<p>The line through <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> always intersects the curve in a third point, except when the line is perfectly vertical. In that case, the line is said to intersect the curve at <span class="arithmatex">\(0\)</span>, called the "point at infinity". The point <span class="arithmatex">\(0\)</span> acts as the identity, but is not really part of the curve, so it needs to be handled as a special case. Now, observe that the line through <span class="arithmatex">\(R\)</span> and <span class="arithmatex">\(-R\)</span> is vertical, so <span class="arithmatex">\(R+(-R)=0\)</span>, as foreshadowed.</p>
+<p>When <span class="arithmatex">\(P = Q\)</span>, the line through <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> is taken to be the <em>tangent</em> to the curve at <span class="arithmatex">\(P\)</span> (or, equivalently, <span class="arithmatex">\(Q\)</span>). It makes sense:</p>
+<ul>
+<li>Just imagine fixing <span class="arithmatex">\(P\)</span> and sliding <span class="arithmatex">\(Q\)</span> along the curve from one side of <span class="arithmatex">\(P\)</span> to the other.</li>
+<li>If we want the animation of the line during the sliding to be continuous, the line must be the tangent when <span class="arithmatex">\(P = Q\)</span>.</li>
+</ul>
+<p>After all, the animation is continuous when the slope of the line is continuous, and the slope is continuous at a point when it's equal to its limit, i.e. the derivative, at that point.</p>
+<p>Here's a figure with a fixed point <span class="arithmatex">\(P\)</span> and secants through <span class="arithmatex">\(P\)</span> and several <span class="arithmatex">\(Q_i\)</span> points that converge to <span class="arithmatex">\(P\)</span>. I chose a color map such that the closer a <span class="arithmatex">\(Q_i\)</span> is to <span class="arithmatex">\(P\)</span>, the <em>bluer</em> and the closer to the tangent at <span class="arithmatex">\(P\)</span> is the secant through it.</p>
+<p><img alt="Secants and tangents" src="../../../../ECDSA/__generated__/tangent.svg"/></p>
+<p>By the way, we still count the tangent line as intersecting the elliptic curve in three points, with two coinciding at the point of tangency.</p>
+<p>But how is it possible that even an "almost vertical" line through two points on the curve always intersects the curve at a third point? Such a line intersects the curve either at a point towards <span class="arithmatex">\((+\infty, +\infty)\)</span> or <span class="arithmatex">\((+\infty, -\infty)\)</span>.</p>
+<p>For <span class="arithmatex">\(x\to+\infty\)</span>:</p>
+<ul>
+<li><strong>line:</strong><ul>
+<li><span class="arithmatex">\(y = mx + q \sim mx\)</span></li>
+</ul>
+</li>
+<li><strong>curve:</strong><ul>
+<li><span class="arithmatex">\(y^2 = x^3 + 7 \sim x^3 \implies\)</span><ul>
+<li><span class="arithmatex">\(y \sim x^{3/2}\)</span> (upper branch)</li>
+<li><span class="arithmatex">\(y \sim -x^{3/2}\)</span> (lower branch)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>What we're saying is that when <span class="arithmatex">\(x\)</span> becomes very big, additive terms such as <span class="arithmatex">\(q\)</span> and <span class="arithmatex">\(7\)</span> are dwarfed and can be ignored, so the line grows like <span class="arithmatex">\(mx\)</span>, while the curve grows like <span class="arithmatex">\(x^{3/2}\)</span>. The curve grows asymptotically faster, so, when <span class="arithmatex">\(m &gt; 0\)</span>, the upper branch of the curve will hit the line from below and cross it sooner or later. Similarly, when <span class="arithmatex">\(m &lt; 0\)</span>, the lower branch of the curve will hit the line from above and cross it.</p>
+<p>Here's a visual example for <span class="arithmatex">\(m&gt;0\)</span>:</p>
+<p><img alt="elliptic curve" src="../../../../ECDSA/__generated__/intersection.svg"/></p>
+<h3 id="finding-the-intersection-point">Finding the intersection point</h3>
+<p>The algebra is easy enough. We just compute the intersection between the curve and the line. Let's start from the two points <span class="arithmatex">\(P = (x_P, y_P)\)</span> and <span class="arithmatex">\(Q = (x_Q, y_Q)\)</span>.</p>
+<p>If the line is vertical, the third intersection point is <span class="arithmatex">\(0\)</span>. Otherwise, its equation has the form <span class="arithmatex">\(y = mx + q\)</span>, where</p>
+<div class="arithmatex">\[
+\begin{align*}
+m &amp;= \frac{y_Q-y_P}{x_Q-x_P} \\
+q &amp;= y_P - m x_P
+\end{align*}
+\]</div>
+<p>We need to solve for <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> the system</p>
+<div class="arithmatex">\[
+\left\{
+\begin{align*}
+y &amp;= mx + q \\
+y^2 &amp;= x^3 + 7
+\end{align*}
+\right.
+\]</div>
+<p>We substitute the first equation into the second and get</p>
+<div class="arithmatex">\[
+\begin{gather*}
+(mx + q)^2 = x^3 + 7 &amp;\iff\\
+m^2x^2 + q^2 + 2mqx = x^3 + 7 &amp;\iff\\
+x^3 - m^2x^2 - 2mqx + 7 - q^2 = 0
+\end{gather*}
+\]</div>
+<p>Before giving in to despair, we remember that we already know two solutions, <span class="arithmatex">\(x_P\)</span> and <span class="arithmatex">\(x_Q\)</span>, and we're looking for the third point <span class="arithmatex">\(-R = (x_{-R}, y_{-R})\)</span>. This means that the LHS of the equation in <span class="arithmatex">\(x\)</span> must be factorizable as</p>
+<div class="arithmatex">\[(x - x_P)(x - x_Q)(x - x_{-R}) = 0\]</div>
+<p>Let's expand it to get</p>
+<div class="arithmatex">\[x^3 + x^2(-x_P-x_Q-x_{-R}) + \ldots = 0\]</div>
+<p>The second term is all we need: for the two LHS to be equal, we must have</p>
+<div class="arithmatex">\[
+\begin{align*}
+-m^2 &amp;= -x_P-x_Q-x_{-R} \iff\\
+x_{-R} &amp;= m^2 - x_P - x_Q
+\end{align*}
+\]</div>
+<p>The <span class="arithmatex">\(y\)</span> coordinate is simply <span class="arithmatex">\(y_{-R} = m x_{-R} + q\)</span>.</p>
+<p>Therefore, the sum of the two points can be computed as</p>
+<div class="arithmatex">\[
+\left\{
+    \begin{align*}
+        m &amp;= (y_Q-y_P)/(x_Q-x_P) \\
+        x_R &amp;= m^2 - x_P - x_Q \\
+        y_R &amp;= m (x_P - x_R) - y_P
+    \end{align*}
+\right.
+\]</div>
+<p>As we can see, finding the sum of two points requires subtractions, multiplications, and one division to compute <span class="arithmatex">\(m\)</span>. To sum two points on the curve mod <span class="arithmatex">\(p\)</span>, we just need to do the calculations mod <span class="arithmatex">\(p\)</span>. We know how to "divide" mod <span class="arithmatex">\(p\)</span>, so we're good.</p>
+<p>Let's briefly go through the case with <span class="arithmatex">\(P=Q=(x,y)\)</span>. Recall that we need to consider the tangent to the curve at <span class="arithmatex">\((x,y)\)</span>. Note that for <span class="arithmatex">\(y=0\)</span> the tangent is perfectly vertical, so the result is <span class="arithmatex">\(0\)</span> (look at the figure). For <span class="arithmatex">\(y\neq 0\)</span>, we need to compute the derivative.</p>
+<p>We start from the equation</p>
+<div class="arithmatex">\[y^2 = x^3 + 7\]</div>
+<p>and derive both sides with respect to <span class="arithmatex">\(x\)</span>:</p>
+<div class="arithmatex">\[2y \frac{dy}{dx} = 3x^2\]</div>
+<p>We solve for the derivative:</p>
+<div class="arithmatex">\[\frac{dy}{dx} = \frac{3x^2}{2y}\]</div>
+<p>That's our <span class="arithmatex">\(m\)</span>.</p>
+<p>A complete implementation will also handle the (trivial) edge cases with <span class="arithmatex">\(P=0\)</span> or <span class="arithmatex">\(Q=0\)</span>, of course.</p>
+<h3 id="why-reflect-the-intersection-point">Why reflect the intersection point</h3>
+<p>Having to reflect the intersection point might seem a little arbitrary at first, but if we think about it, not reflecting it is problematic. Indeed, since the three points lie on the same line, without reflection all the following equations would hold:</p>
+<ul>
+<li><span class="arithmatex">\(P + Q = R\)</span></li>
+<li><span class="arithmatex">\(P + R = Q\)</span></li>
+<li><span class="arithmatex">\(Q + R = P\)</span></li>
+</ul>
+<p>By summing the first two equations, we'd get <span class="arithmatex">\(2P+Q+R=R+Q\)</span>, i.e. <span class="arithmatex">\(P=0\)</span>. Analogously, by summing the last two equations, we'd get <span class="arithmatex">\(R=0\)</span>. Since <span class="arithmatex">\(P=Q=R=0\)</span>, that rule would only work for <span class="arithmatex">\(0\)</span>.</p>
+<p>The correct rule will look less asymmetric if we think of it as <span class="arithmatex">\(P+Q+R=0\)</span>, which gives</p>
+<ul>
+<li><span class="arithmatex">\(P+Q=-R\)</span></li>
+<li><span class="arithmatex">\(P+R=-Q\)</span></li>
+<li><span class="arithmatex">\(Q+R=-P\)</span></li>
+</ul>
+<p>But what about this point "at infinity"? Where does it come from? All I know is that it has to do with the so-called <em>projective space</em>.</p>
+<p>I got somewhat acquainted with that space when I was doing 3D graphics. In 3D, we may add a 4th coordinate, so that <span class="arithmatex">\((x, y, z)\)</span> is represented by <span class="arithmatex">\((wx, wy, wz, w)\)</span> and some computations become more regular (i.e. with fewer exceptions). At the end, we divide by <span class="arithmatex">\(w\)</span> to go back to the usual coordinates.</p>
+<p>There's also the 2D case when we project a 3D scene onto a 2D screen: <span class="arithmatex">\(\pi(x, y, z) = (x/z, y/z)\)</span>, where I used <span class="arithmatex">\(\pi\)</span> for <em>projection</em>. This has to do with how we perceive the world, so that the farther an object is from us, the smaller it looks (assuming, from our POV, that <span class="arithmatex">\(z\)</span> is the distance of the object from us).</p>
+<h3 id="projective-space">Projective space</h3>
+<p>Let's say we have some 3D space. We make it projective by imposing that, in general, <span class="arithmatex">\((x, y, z) \sim (\lambda x, \lambda y, \lambda z)\)</span> for all <span class="arithmatex">\(\lambda\neq 0\)</span>, and <span class="arithmatex">\((x, y, z)\neq(0, 0, 0)\)</span>, where <span class="arithmatex">\(\sim\)</span> means <em>equivalent</em>. In words, <em>all non-zero scalings of a non-zero point are equivalent</em>. Those are all the points, origin excluded, on the same line through the origin.</p>
+<p>The classes partition the <em>punctured</em> (i.e. without the origin) 3D space. The origin, if included, would be in its own singleton class <span class="arithmatex">\(\{0\}\)</span> anyway. If we instead allowed <span class="arithmatex">\(\lambda = 0\)</span>, then two points <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> on different lines through the origin would violate the equivalence relation: <span class="arithmatex">\(x\sim 0\)</span> and <span class="arithmatex">\(y\sim 0\)</span>, but <span class="arithmatex">\(x\nsim y\)</span>.</p>
+<p>Indeed, an equivalence relation must follow three rules:</p>
+<ul>
+<li>reflexivity: <span class="arithmatex">\(x\sim x\)</span></li>
+<li>symmetry: <span class="arithmatex">\(x\sim y\iff y\sim x\)</span></li>
+<li>transitivity: <span class="arithmatex">\(x\sim y \wedge y\sim z\implies x\sim z\)</span></li>
+</ul>
+<p>where "<span class="arithmatex">\(\wedge\)</span>" means "and".</p>
+<p>To remember the rules, we can just think of <em>equality</em>, which is also an equivalence relation:</p>
+<ul>
+<li><span class="arithmatex">\(a=a\)</span></li>
+<li><span class="arithmatex">\(a=b\iff b=a\)</span></li>
+<li><span class="arithmatex">\(a=b\wedge b=c\implies a=c\)</span></li>
+</ul>
+<p>So, if <span class="arithmatex">\(x\sim 0\)</span> and <span class="arithmatex">\(0\sim y\)</span>, then we must have <span class="arithmatex">\(x\sim y\)</span>. If <span class="arithmatex">\(0\)</span> is equivalent to elements that belong to different classes, then it breaks transitivity.</p>
+<p>Since the origin doesn't belong to the projective space, any generic point <span class="arithmatex">\((x, y, z)\)</span> in it is to be considered non-zero.</p>
+<p>Back to our elliptic equation. On the 2D plane, the equation is <span class="arithmatex">\(y^2 = x^3 + 7\)</span>, but that won't work in the projective space. Since <span class="arithmatex">\((x, y, z)\sim (\lambda x, \lambda y, \lambda z)\)</span>, with <span class="arithmatex">\(\lambda\neq 0\)</span>, we'd like for <span class="arithmatex">\((\lambda x, \lambda y, \lambda z)\)</span> to be on the curve whenever <span class="arithmatex">\((x, y, z)\)</span> is.</p>
+<p>Let's write the equation in the projective space as</p>
+<div class="arithmatex">\[Y^2 = X^3 + 7\]</div>
+<p>and do the substitution <span class="arithmatex">\((X, Y, Z) = (\lambda x, \lambda y, \lambda z)\)</span>:</p>
+<div class="arithmatex">\[\lambda^2 y^2 = \lambda^3 x^3 + 7\]</div>
+<p>We want that to hold whenever <span class="arithmatex">\((x, y, z)\)</span> is a solution, i.e. whenever <span class="arithmatex">\(y^2 = x^3 + 7\)</span>. For that to happen, the equation must factorize as</p>
+<div class="arithmatex">\[f(\lambda)(y^2 - x^3 - 7) = 0\]</div>
+<p>so that when the second factor is <span class="arithmatex">\(0\)</span>, the equation holds regardless of the factor with <span class="arithmatex">\(\lambda\)</span>.</p>
+<p>We still have a <span class="arithmatex">\(Z\)</span> to add, so why not use it to balance the degree of the terms? That is:</p>
+<div class="arithmatex">\[Y^2 Z = X^3 + 7 Z^3\]</div>
+<p>Now the substitution gives</p>
+<div class="arithmatex">\[
+\begin{gather*}
+\lambda^3 y^2 z = \lambda^3 x^3 + 7 \lambda^3 z^3 &amp;\iff \\
+\lambda^3 (y^2 z - x^3 - 7 z^3) = 0
+\end{gather*}
+\]</div>
+<p>We did it, but what about that annoying extra <span class="arithmatex">\(z\)</span>? If we want to recover the original equation, we need to set <span class="arithmatex">\(z=1\)</span>, i.e. we need to restrict ourselves to <span class="arithmatex">\((x, y, 1)\)</span>.</p>
+<p>That's perfectly fine, though: the original curve lies on the <span class="arithmatex">\(z=1\)</span> plane, while on each <span class="arithmatex">\(z=\lambda\)</span> plane, with <span class="arithmatex">\(\lambda\neq 0\)</span>, lies a <span class="arithmatex">\(\lambda\)</span>-scaled version of the original curve:</p>
+<p><img alt="elliptic curve in projective space" src="../../../../ECDSA/__generated__/ec_proj.svg"/></p>
+<p>With this setup, we can say that either all the elements of an equivalence class (a punctured line through the origin) are on the curve or none of them are.</p>
+<p>There's actually an easier way to get the equation in <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span>, and <span class="arithmatex">\(z\)</span> coordinates. The original 2D curve is embedded in the 3D space by adding a <span class="arithmatex">\(z = 1\)</span> coordinate, i.e.</p>
+<div class="arithmatex">\[(x, y)\mapsto (x, y, 1) \sim (\lambda x, \lambda y, \lambda) = (X, Y, Z)\]</div>
+<p>Starting from a generic point <span class="arithmatex">\((X, Y, Z)\)</span> with <span class="arithmatex">\(Z\neq 0\)</span>, we can go back to the 2D case by just dividing by <span class="arithmatex">\(Z\)</span> and dropping the third coordinate, i.e.</p>
+<div class="arithmatex">\[(x, y) = (X/Z, Y/Z)\]</div>
+<p>Now, let's substitute <span class="arithmatex">\(x = X/Z\)</span> and <span class="arithmatex">\(y = Y/Z\)</span> into the starting equation and get rid of the denominators:</p>
+<div class="arithmatex">\[
+\begin{align*}
+y^2 &amp;= x^3 + 7 \\
+(Y/Z)^2 &amp;= (X/Z)^3 + 7 \\
+\frac{Y^2}{Z^2} &amp;= \frac{X^3}{Z^3} + 7 \\
+Y^2 Z &amp;= X^3 + 7Z^3
+\end{align*}
+\]</div>
+<p>One can also apply other projections. For instance, <span class="arithmatex">\(x = X/Z^2\)</span> and <span class="arithmatex">\(y = Y/Z^3\)</span> lead to</p>
+<div class="arithmatex">\[
+\begin{align*}
+y^2 &amp;= x^3 + 7 \\
+(Y/Z^3)^2 &amp;= (X/Z^2)^3 + 7 \\
+\frac{Y^2}{Z^6} &amp;= \frac{X^3}{Z^6} + 7 \\
+Y^2 &amp;= X^3 + 7Z^6
+\end{align*}
+\]</div>
+<p>This is actually nicer and used to greatly speed up computations. It's called <em>Jacobian projection</em>.</p>
+<p>We still haven't solved the mystery of the so-called "point at infinity". That was the main reason why we decided to explore projective spaces.</p>
+<h4 id="point-at-infinity">Point at infinity</h4>
+<p>We know that a vertical line intersects the planar elliptic curve either at no points at all or at the points <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(-P\)</span>, and <span class="arithmatex">\(0\)</span> for some point <span class="arithmatex">\(P\)</span>, where <span class="arithmatex">\(0\)</span> is the so-called "point at infinity". Let's try to make sense of it.</p>
+<p>On the plane, a vertical line has equation <span class="arithmatex">\(x = k\)</span>, but in our projective space that's the equation of a plane. Like with the elliptic curve, we want to upgrade the equation so that if <span class="arithmatex">\((x, y, z)\)</span> is on the line, then so is <span class="arithmatex">\((\lambda x, \lambda y, \lambda z)\)</span>. We use the same substitution as before:</p>
+<div class="arithmatex">\[
+\begin{align*}
+x &amp;= k \\
+\frac{X}{Z} &amp;= k \\
+X &amp;= kZ
+\end{align*}
+\]</div>
+<p>So the equation of the vertical plane becomes <span class="arithmatex">\(X = kZ\)</span>, which represents a family of <span class="arithmatex">\(Z\)</span>-scaled vertical lines. The equation <span class="arithmatex">\(X = kZ\)</span> makes sense since, as <span class="arithmatex">\(Z\)</span> gets closer to <span class="arithmatex">\(0\)</span>, the line must also get closer to the origin because everything, curve included, gets scaled down.</p>
+<p>Let's find the intersections between the curve and the line by solving</p>
+<div class="arithmatex">\[
+\begin{cases}
+Y^2 Z = X^3 + 7Z^3\\
+X = kZ
+\end{cases}
+\]</div>
+<p>We substitute the second equation into the first:</p>
+<div class="arithmatex">\[Y^2 Z = k^3 Z^3 + 7Z^3\]</div>
+<p>That can be rewritten as</p>
+<div class="arithmatex">\[Z (Z^2 (k^3 + 7) - Y^2) = 0\]</div>
+<p>For <span class="arithmatex">\(Z\neq 0\)</span>, we can divide by <span class="arithmatex">\(Z\)</span>, so we're left with</p>
+<div class="arithmatex">\[Z^2 (k^3 + 7) - Y^2 = 0\]</div>
+<p>which gives two solutions for each <span class="arithmatex">\(Z\neq 0\)</span> because of that <span class="arithmatex">\(Y^2\)</span>. Those two solutions correspond to two points <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(-P\)</span>.</p>
+<p>For <span class="arithmatex">\(Z = 0\)</span>, we get <span class="arithmatex">\(X = 0\)</span> from the second equation, i.e. the solutions are <span class="arithmatex">\((0, \lambda, 0)\)</span> for <span class="arithmatex">\(\lambda\neq 0\)</span>, which is the Y-axis without the origin. We can take <span class="arithmatex">\((0, 1, 0)\)</span> as the <em>representative</em> of that class, which is exactly the point at infinity. As we can see, it doesn't live in any plane with the curve, so it doesn't exist in our original 2D space, but we already knew that.</p>
+<p>This reminded me that we never designated representatives for the equivalence classes. Let's see:</p>
+<ul>
+<li>Each class <span class="arithmatex">\(C\)</span> is a punctured line through the origin.</li>
+<li><strong>If</strong> <span class="arithmatex">\(C\)</span> intersects the plane <span class="arithmatex">\(Z = 1\)</span> at some point <span class="arithmatex">\(P = (X, Y, 1)\)</span>:<ul>
+<li><span class="arithmatex">\(\mathrm{repr}(C) = P\)</span></li>
+</ul>
+</li>
+<li><strong>Else</strong>:<ul>
+<li><span class="arithmatex">\(C\)</span> must lie on the plane <span class="arithmatex">\(Z = 0.\)</span></li>
+<li><strong>If</strong> <span class="arithmatex">\(C\)</span> intersects the line <span class="arithmatex">\(\{Y=1; Z=0\}\)</span> at some point <span class="arithmatex">\(P = (X, 1, 0)\)</span>:<ul>
+<li><span class="arithmatex">\(\mathrm{repr}(C) = P\)</span></li>
+</ul>
+</li>
+<li><strong>Else</strong>:<ul>
+<li><span class="arithmatex">\(C\)</span> lies on the X-axis, i.e. <span class="arithmatex">\(\{Y = Z = 0\}\)</span>.</li>
+<li><span class="arithmatex">\(C\)</span> has the form <span class="arithmatex">\((X, 0, 0)\)</span>.</li>
+<li><span class="arithmatex">\(\mathrm{repr}(C) = (1, 0, 0)\)</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>So, we have three groups of representatives:</p>
+<ul>
+<li><span class="arithmatex">\((X, Y, 1)\)</span>: on the curve if and only if <span class="arithmatex">\(Y^2 = X^3 + 7\)</span>.</li>
+<li><span class="arithmatex">\((X, 1, 0)\)</span>: on the curve if and only if <span class="arithmatex">\(X = 0\)</span>, which gives the point at infinity <span class="arithmatex">\((0, 1, 0)\)</span>.</li>
+<li><span class="arithmatex">\((1, 0, 0)\)</span>: not on the curve.</li>
+</ul>
+<h4 id="addition-in-projective-space">Addition in projective space</h4>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong><em>You can safely skip this section!</em></strong></p>
+</div>
+<p>Computing <span class="arithmatex">\(m\)</span>, the slope of the line through the points <span class="arithmatex">\((x_1, y_1)\)</span> and <span class="arithmatex">\((x_2, y_2)\)</span>, requires a division, which, mod <span class="arithmatex">\(p\)</span>, is a relatively expensive operation (compared to simple additions and multiplications).</p>
+<p>Let's recall how to compute the point <span class="arithmatex">\((x_3, y_3) = (x_1, y_1) + (x_2, y_2)\)</span>, assuming <span class="arithmatex">\(x_1\neq x_2\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+m &amp;= (y_2-y_1)/(x_2-x_1) \\
+x_3 &amp;= m^2 - x_1 - x_2 \\
+y_3 &amp;= m (x_1 - x_3) - y_1
+\end{align*}
+\]</div>
+<p>To go from the plane to the 3D projective space, we proceed as we did before with the elliptic curve and the line equations, i.e. we make the substitution <span class="arithmatex">\((x,y) = (X/Z, Y/Z)\)</span>.</p>
+<p>Let's start with <span class="arithmatex">\(m\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+m &amp;= \frac{y_2-y_1}{x_2-x_1} \\
+  &amp;= \frac{Y_2/Z_2 - Y_1/Z_1}{X_2/Z_2 - X_1/Z_1} \\
+  &amp;= \frac{Y_2/Z_2 - Y_1/Z_1}{X_2/Z_2 - X_1/Z_1} \cdot \frac{Z_1 Z_2}{Z_1 Z_2} \\
+  &amp;= \frac{Y_2 Z_1 - Y_1 Z_2}{X_2 Z_1 - X_1 Z_2}
+\end{align*}
+\]</div>
+<p>We define</p>
+<div class="arithmatex">\[
+\begin{align*}
+A &amp;= Y_1 Z_2 \\
+B &amp;= Y_2 Z_1 - A \\
+C &amp;= X_1 Z_2 \\
+D &amp;= X_2 Z_1 - C
+\end{align*}
+\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[
+m = \frac{Y_2 Z_1 - Y_1 Z_2}{X_2 Z_1 - X_1 Z_2} = \frac{B}{D}
+\]</div>
+<p>Now we deal with <span class="arithmatex">\(x_3\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+x_3 &amp;= m^2 - x_1 - x_2 \\
+\frac{X_3}{Z_3} &amp;= \frac{B^2}{D^2} - \frac{X_1}{Z_1} - \frac{X
+_2}{Z_2} \\
+X_3 &amp;= Z_3 \frac{B^2 Z_1 Z_2 - D^2 (X_1 Z_2 + X_2 Z_1)}{D^2 Z_1 Z_2} \\
+&amp;= Z_3 \frac{B^2 Z_1 Z_2 - D^2 (D + 2C)}{D^2 Z_1 Z_2} \end{align*}
+\]</div>
+<p>It's <span class="arithmatex">\(y_3\)</span>'s turn:</p>
+<div class="arithmatex">\[
+\begin{align*}
+y_3 &amp;= m (x_1 - x_3) - y_1 \\
+\frac{Y_3}{Z_3} &amp;= \frac{B}{D} \left(\frac{X_1}{Z_1} - \frac{X_3}{Z_3}\right) - \frac{Y_1}{Z_1} \\
+Y_3 &amp;= Z_3 \frac{B(X_1 Z_3 - X_3 Z_1) - Y_1 D Z_3}{D Z_1 Z_3} \\
+&amp;= \frac{B(X_1 Z_3 - X_3 Z_1) - Y_1 D Z_3}{D Z_1} \\
+&amp;= \frac{B\left(X_1 Z_3 - \left(  
+  Z_3 \frac{B^2 Z_1 Z_2 - D^2 (D + 2C)}{D^2 Z_1 Z_2}
+\right) Z_1\right) - Y_1 D Z_3}{D Z_1} \\
+&amp;= Z_3\frac{B\left(X_1 - \frac{B^2 Z_1 Z_2 - D^2 (D + 2C)}{D^2 Z_2}\right) - Y_1 D}{D Z_1} \\
+&amp;= Z_3\frac{B\left(X_1 - \frac{B^2 Z_1 Z_2 - D^2 (D + 2C)}{D^2 Z_2}\right) - Y_1 D}{D Z_1}\cdot \frac{D^2 Z_2}{D^2 Z_2} \\
+&amp;= Z_3\frac{B(X_1 Z_2 D^2 - B^2 Z_1 Z_2 + D^2 (D + 2C)) - Y_1 D^3 Z_2}{D^3 Z_1 Z_2} \\
+&amp;= Z_3\frac{B(D^2 (D + 3C) - B^2 Z_1 Z_2) - Y_1 D^3 Z_2}{D^3 Z_1 Z_2} \\
+\end{align*}
+\]</div>
+<p>We substituted <span class="arithmatex">\(X_3\)</span> into <span class="arithmatex">\(Y_3\)</span>, so we could factor out <span class="arithmatex">\(Z_3\)</span>, since <span class="arithmatex">\(X_3 = Z_3 (\ldots)\)</span>.</p>
+<p>We end up with</p>
+<div class="arithmatex">\[
+\begin{align*}
+X_3 &amp;= Z_3\frac{B^2 Z_1 Z_2 - D^2 (D + 2C)}{D^2 Z_1 Z_2} \\
+Y_3 &amp;= Z_3\frac{B(D^2 (D + 3C) - B^2 Z_1 Z_2) - Y_1 D^3 Z_2}{D^3 Z_1 Z_2}
+\end{align*}
+\]</div>
+<p>and by choosing <span class="arithmatex">\(Z_3 = D^3 Z_1 Z_2\)</span>, we get rid of the denominators:</p>
+<div class="arithmatex">\[
+\begin{align*}
+X_3 &amp;= D(B^2 Z_1 Z_2 - D^2 (D + 2C)) \\
+Y_3 &amp;= B(D^2 (D + 3C) - B^2 Z_1 Z_2) - Y_1 D^3 Z_2 \\
+Z_3 &amp;= D^3 Z_1 Z_2
+\end{align*}
+\]</div>
+<p>We can clean that up further by defining</p>
+<div class="arithmatex">\[
+\begin{align*}
+E &amp;= B^2 Z_1 Z_2 - D^2 (D + 2C) \\
+F &amp;= D^3 Z_2
+\end{align*}
+\]</div>
+<p>which results in</p>
+<div class="arithmatex">\[
+\begin{align*}
+X_3 &amp;= DE \\
+Y_3 &amp;= B(D^2 C - E) - Y_1 F \\
+Z_3 &amp;= Z_1 F
+\end{align*}
+\]</div>
+<p>Note that further micro-optimizations are possible. For instance, we shouldn't compute <span class="arithmatex">\(D^2\)</span> and <span class="arithmatex">\(D^3\)</span> separately.</p>
+<p>I hope my calculations are correct, since this is my first time doing them. Either way, I'm satisfied with the result from a pedagogical point of view. I hope you are as well. As we can see, the common denominator was put in <span class="arithmatex">\(Z_3\)</span> to avoid intermediate divisions. Now we can add many points together without any division and only do one single division when we want to go back to our 2D plane:</p>
+<div class="arithmatex">\[
+\begin{align*}
+Z_{\text{inv}} &amp;= Z^{-1} \\
+(x, y) &amp;= (XZ_{\text{inv}}, YZ_{\text{inv}})
+\end{align*}
+\]</div>
+<p>That's one slow (at least in <span class="arithmatex">\(\mathbb{Z}_p\)</span>) division and 2 fast multiplications.</p>
+<p>Note that the <span class="arithmatex">\(P=Q\)</span> case is handled similarly. Moreover, the same approach will also work for the Jacobian projection, i.e. for <span class="arithmatex">\((x, y) = (X/Z^2, Y/Z^3)\)</span>.</p>
+<p>This is almost a philosophical observation. When we substitute <span class="arithmatex">\(x\)</span> with <span class="arithmatex">\(X/Z\)</span>, we're <em>not</em> promoting <span class="arithmatex">\(x\)</span> to a fraction, but we're <em>reexpressing</em> it as a fraction, since they're assumed to be equal.</p>
+<p>For example, if <span class="arithmatex">\(x\)</span> is a simple integer in <span class="arithmatex">\(\mathbb{Z}\)</span> (without mod) and we replace it with <span class="arithmatex">\(X/Z\)</span> with <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Z\)</span> also in <span class="arithmatex">\(\mathbb{Z}\)</span>, then we're ranking up from integers to rational numbers, which is a promotion. Indeed, unless <span class="arithmatex">\(X\)</span> is divisible by <span class="arithmatex">\(Z\)</span> or we're willing to lose some information, we won't be able to go back to <span class="arithmatex">\(x\)</span> when the time comes.</p>
+<p>In the ECDSA case, though, <span class="arithmatex">\(x\)</span> is in <span class="arithmatex">\(\mathbb{Z}_p\)</span>, with <span class="arithmatex">\(p\)</span> prime, so <span class="arithmatex">\(X/Z\)</span> is also in <span class="arithmatex">\(\mathbb{Z}_p\)</span>: we're not promoting <span class="arithmatex">\(x\)</span> to something more, but just reexpressing it.</p>
+<p>Let's say we have a huge matrix that can be factorized into two small matrices because it's low-rank (i.e. many of its rows or columns are linear combinations of a selected few). Instead of carrying around the huge matrix during the computations, we may want to keep it in factorized form, <span class="arithmatex">\((L, R)\)</span>, and then update the factorized form itself:</p>
+<div class="arithmatex">\[(L', R') = (f(L, R), g(L, R))\]</div>
+<p>One way to find <span class="arithmatex">\(f\)</span> and <span class="arithmatex">\(g\)</span> is to do the substitution <span class="arithmatex">\(M = LR\)</span> into whatever expression we want to evaluate involving <span class="arithmatex">\(M\)</span>, and put the result back into factorized form. Note that if we end up with <span class="arithmatex">\(L=I\)</span> or <span class="arithmatex">\(R=I\)</span> (where <span class="arithmatex">\(I\)</span> is the identity matrix), then the factorization is useless for our purposes.</p>
+<h3 id="back-to-the-group">Back to the group</h3>
+<p>ECDSA uses the addition operation we defined above to generate a group from a predetermined generator <span class="arithmatex">\(G\)</span>. All the considered points are on the curve mod <span class="arithmatex">\(p\)</span>, meaning that their coordinates are in <span class="arithmatex">\(\mathbb{Z}_p\)</span>. Here's the group:</p>
+<div class="arithmatex">\[G = \{0, G, 2G, 3G, \ldots, (N-1)G\}\]</div>
+<p>Notice that <span class="arithmatex">\(G\)</span> has only a finite number of elements, which is to be expected since the points lie on a <span class="arithmatex">\(p\times p\)</span> grid, which contains <span class="arithmatex">\(p^2\)</span> distinct points at most.</p>
+<p>We start from <span class="arithmatex">\(0\)</span> and keep adding <span class="arithmatex">\(G\)</span> until we loop, i.e. we get a point that we've already seen. Let's assume this is our current list:</p>
+<div class="arithmatex">\[0, G, 2G, 3G, \ldots, kG, \ldots, hG\]</div>
+<p>We assume we've just looped, so the first <span class="arithmatex">\(h\)</span> elements are all distinct, and <span class="arithmatex">\(hG = kG\)</span>, with <span class="arithmatex">\(k &lt; h\)</span>.</p>
+<p>We must have <span class="arithmatex">\(0 = hG-kG = (h-k)G\)</span>. The only elements in the list that can be 0 are the first one and the last one. Since <span class="arithmatex">\(h-k&gt;0\)</span>, <span class="arithmatex">\((h-k)G\)</span> must be the last element, so <span class="arithmatex">\(h-k=h\)</span>, which gives <span class="arithmatex">\(k=0\)</span>.</p>
+<p>So we end up with the following group:</p>
+<div class="arithmatex">\[G = \{0, G, 2G, 3G, \ldots, (N-1)G\}\]</div>
+<p><span class="arithmatex">\(G\)</span> has order <span class="arithmatex">\(N\)</span>, i.e. it has <span class="arithmatex">\(N\)</span> elements. This looping should remind you of <span class="arithmatex">\(\mathbb{Z}_N\)</span>:</p>
+<div class="arithmatex">\[\mathbb{Z}_N = \{0, 1, 2, 3, \ldots, N-1\}\]</div>
+<p>Indeed, <span class="arithmatex">\(\mathbb{Z}_N\)</span> is also a (commutative) group:</p>
+<ul>
+<li>group operation: <span class="arithmatex">\(+\)</span></li>
+<li>identity: <span class="arithmatex">\(0\)</span></li>
+<li>inverse of <span class="arithmatex">\(x\)</span>: <span class="arithmatex">\(-x\)</span><ul>
+<li>so that <span class="arithmatex">\(x + (-x) = (-x) + x = 0\)</span></li>
+</ul>
+</li>
+</ul>
+<p>Moreover, it's generated by <span class="arithmatex">\(1\)</span>:</p>
+<div class="arithmatex">\[\mathbb{Z}_N = \{0, 1, 1+1, 1+1+1, \ldots, (N-1)1\}\]</div>
+<p>If we couldn't inspect the single elements, and we just used the group laws, we'd actually be unable to tell <span class="arithmatex">\(G\)</span> and <span class="arithmatex">\(\mathbb{Z}_N\)</span> apart.</p>
+<p>For instance, let's say we're given, as programmers, an opaque type <code>Element</code> together with an identity <code>zero</code> and an operation <code>add</code>. Would we be able to tell whether we're working with <span class="arithmatex">\(G\)</span> or <span class="arithmatex">\(\mathbb{Z}_N\)</span> without looking inside <code>Element</code> or at the implementation? No, we wouldn't. By defining a common API, we <em>abstracted away</em> the differences.</p>
+<p>So, we've got ourselves an <em>isomorphism</em> between groups:</p>
+<div class="arithmatex">\[aG + bG = (a+b)G\]</div>
+<p>More formally, let's define <span class="arithmatex">\(f: a\mapsto aG\)</span>, which is a <em>bijection</em>, i.e. a 1-1 mapping between all the elements of <span class="arithmatex">\(\mathbb{Z}_N\)</span> and all the elements of <span class="arithmatex">\(G\)</span>. This means that we can invert <span class="arithmatex">\(f\)</span> and use <span class="arithmatex">\(f^{-1}\)</span> to go the other direction (however computationally expensive it is to do).</p>
+<p>Then the equation above can be rewritten as</p>
+<div class="arithmatex">\[f(a) +_G f(b) = f(a+_{\mathbb{Z}_N}b)\]</div>
+<p>That means that we can either</p>
+<ul>
+<li>transform the addends into <span class="arithmatex">\(G\)</span>'s elements and then add them up using <span class="arithmatex">\(G\)</span>'s addition operation, or</li>
+<li>sum the addends using <span class="arithmatex">\(\mathbb{Z}_N\)</span>'s addition operation and then transform the result into the corresponding element in <span class="arithmatex">\(G\)</span>.</li>
+</ul>
+<p>The final result will be the same.</p>
+<p>Another way of saying this is that we can move back and forth between <span class="arithmatex">\(G\)</span> and <span class="arithmatex">\(\mathbb{Z}_N\)</span> <em>without losing information</em>.</p>
+<p>For example, for <span class="arithmatex">\(N = 7\)</span>:</p>
+<ul>
+<li><span class="arithmatex">\(3G + 5G = 8G = 7G + G = 0 + G = G\)</span><ul>
+<li>because <span class="arithmatex">\(7G = 0\)</span></li>
+</ul>
+</li>
+<li><span class="arithmatex">\((3 + 5)G = (8)G = (1)G = G\)</span><ul>
+<li>because <span class="arithmatex">\(8\ \mathrm{mod}\ 7 = 1\)</span></li>
+</ul>
+</li>
+</ul>
+<p>In the first case the looping comes from <span class="arithmatex">\(G\)</span>, while in the second case it comes from <span class="arithmatex">\(\mathbb{Z}_7\)</span>. In the second case we only worked inside the parentheses, i.e. with the numbers in <span class="arithmatex">\(\mathbb{Z}_7\)</span>: we didn't touch <span class="arithmatex">\(G\)</span> at all.</p>
+<p>The idea is to work with numbers in <span class="arithmatex">\(\mathbb{Z}_N\)</span>, which are easier to work with, and then transform them into points by multiplying them by <span class="arithmatex">\(G\)</span>. While it's very easy to go from <span class="arithmatex">\(k\)</span> to <span class="arithmatex">\(kG\)</span>, it's computationally infeasible to go back from <span class="arithmatex">\(kG\)</span> to <span class="arithmatex">\(k\)</span>.</p>
+<p>It shouldn't surprise that ECDSA represents <em>private keys</em> as numbers in <span class="arithmatex">\(\mathbb{Z}_N\)</span>, and then multiplies them by <span class="arithmatex">\(G\)</span> to get the associated <em>public keys</em>. This makes recovering the private key from a public key computationally infeasible.</p>
+<h2 id="signing-a-message">Signing a message</h2>
+<p>I'll cheat a little and read my notes for the signing part of the algorithm:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>* Message to sign:
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>    z = 256-bit message digest
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>* Signature generation (in F_n, i.e. mod n):
+<a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>    k = rand_unif({1, ..., n-1})        # ephemeral nonce
+<a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>    R = k * G = (R_x, R_y)
+<a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>    r = R_x mod n                       # 1st component
+<a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a>    if r = 0, restart and choose a new k
+<a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a>    s = (k^{-1} * (z + r * d)) mod n    # 2nd component [d = account private key]
+<a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a>    if s = 0, restart and choose a new k
+<a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a>    v = R_y mod 2               # AKA recid, recovery_id, or is_y_odd
+<a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a>    signature = (r, s, v)
+</code></pre></div>
+<p>Let's see:</p>
+<ul>
+<li><span class="arithmatex">\(G\)</span> is both:<ul>
+<li>the group of points on the elliptic curve (with coordinates in <span class="arithmatex">\(\mathbb{Z}_p\)</span>, with <span class="arithmatex">\(p\)</span> prime)</li>
+<li>the generator of that group</li>
+</ul>
+</li>
+<li><span class="arithmatex">\(n\)</span>, a prime number, is the order of <span class="arithmatex">\(G\)</span></li>
+<li><span class="arithmatex">\(z\)</span> is the message hash</li>
+<li><span class="arithmatex">\(d\)</span> is the private key of the account</li>
+<li><span class="arithmatex">\(k^{-1}\)</span> is the multiplicative inverse mod <span class="arithmatex">\(n\)</span>, i.e. <span class="arithmatex">\(k\cdot k^{-1} = 1\ (\mathrm{mod}\ n)\)</span>.</li>
+</ul>
+<p>Note that I wrote <span class="arithmatex">\(F_n\)</span> or, better, <span class="arithmatex">\(\mathbb{F}_n\)</span> instead of <span class="arithmatex">\(\mathbb{Z}_n\)</span> because, when <span class="arithmatex">\(n\)</span> is prime, the latter is actually a field. The coordinates we've been working with for all this time are in <span class="arithmatex">\(\mathbb{Z}_p\)</span>, which is also a field, since <span class="arithmatex">\(p\)</span> is prime. That's why I wrote "<em>some</em> 3D space" before: depending on which field we choose, we'll end up with a different 3D space.</p>
+<p>We basically already observed that <span class="arithmatex">\(\mathbb{Z}_n\)</span>, with <span class="arithmatex">\(n\)</span> prime, is a <em>field</em>, but we never spelled it out.</p>
+<p>That's actually why our math works both in the continuous case and mod <span class="arithmatex">\(p\)</span>. The theory only requires that the coordinates are elements of a field. It doesn't matter which one.</p>
+<p>A field <span class="arithmatex">\(\mathbb{F}\)</span> is a set equipped with two binary operations, addition and multiplication, such that:</p>
+<ul>
+<li><span class="arithmatex">\(\mathbb{F}\)</span> is a commutative group under addition</li>
+<li><span class="arithmatex">\(\mathbb{F}\setminus\{0\}\)</span> is a commutative group under multiplication</li>
+<li>A distributive law holds:<ul>
+<li>(a+b)c = ac + bc</li>
+</ul>
+</li>
+</ul>
+<p>Note that <span class="arithmatex">\(\mathbb{F}\setminus\{0\}\)</span> means "<span class="arithmatex">\(\mathbb{F}\)</span> minus <span class="arithmatex">\(0\)</span>", i.e. <span class="arithmatex">\(\mathbb{F}\)</span> without the element <span class="arithmatex">\(0\)</span>.</p>
+<p><span class="arithmatex">\(\mathbb{Z}_n\setminus\{0\}\)</span>, with <span class="arithmatex">\(n\)</span> prime, is a group under multiplication because:</p>
+<ul>
+<li>Multiplication is associative: <span class="arithmatex">\(a(bc) = (ab)c = abc\)</span>.</li>
+<li>There's an identity: <span class="arithmatex">\(1\)</span></li>
+<li>Every (non-zero) element <span class="arithmatex">\(x\)</span> has inverse, i.e. the famous <em>multiplicative inverse</em> mod <span class="arithmatex">\(n\)</span>.</li>
+</ul>
+<p>The <span class="arithmatex">\(0\)</span> element has no multiplicative inverse since there's no <span class="arithmatex">\(x\)</span> such that <span class="arithmatex">\(0\cdot x = 1\)</span>. That would be against the very definition of <span class="arithmatex">\(0\)</span> as the identity for the addition operation.</p>
+<p>When <span class="arithmatex">\(n\)</span> is not prime, we lose the group under multiplication because the inverse doesn't exist for all elements. For instance, let's consider mod <span class="arithmatex">\(6\)</span>:</p>
+<ul>
+<li><span class="arithmatex">\(3\cdot 0 = 0\)</span></li>
+<li><span class="arithmatex">\(3\cdot 1 = 3\)</span></li>
+<li><span class="arithmatex">\(3\cdot 2 = 0\)</span></li>
+<li><span class="arithmatex">\(3\cdot 3 = 3\)</span></li>
+<li><span class="arithmatex">\(3\cdot 4 = 0\)</span></li>
+<li><span class="arithmatex">\(3\cdot 5 = 3\)</span></li>
+</ul>
+<p>Since <span class="arithmatex">\(3\)</span> and <span class="arithmatex">\(6\)</span> are not coprime, <span class="arithmatex">\(3\)</span> has no inverse.</p>
+<p>When <span class="arithmatex">\(n\)</span> is not a prime number, <span class="arithmatex">\(\mathbb{Z}_n\)</span> is just a (commutative) <em>ring</em>, which has a weaker structure.</p>
+<p>Well-known examples of fields are:</p>
+<ul>
+<li><span class="arithmatex">\(\mathbb{Q}\)</span>: the rational numbers</li>
+<li><span class="arithmatex">\(\mathbb{R}\)</span>: the real numbers</li>
+<li><span class="arithmatex">\(\mathbb{C}\)</span>: the complex numbers</li>
+</ul>
+<p>The integers are clearly not a field since, for instance, <span class="arithmatex">\(3x = 1\)</span> has no integer solution, so <span class="arithmatex">\(3\)</span> has no multiplicative inverse. So, by adding a mod <span class="arithmatex">\(p\)</span>, with <span class="arithmatex">\(p\)</span> prime, we gain more structure, and we get ourselves a field!</p>
+<p>Back to the algorithm. The first two lines are pretty easy:</p>
+<ul>
+<li>We generate a random (uniformly distributed) temporary <em>nonce</em> <span class="arithmatex">\(k\)</span> (a number to be used only once <em>ever</em>)</li>
+<li>We convert <span class="arithmatex">\(k\)</span> into the associated point <span class="arithmatex">\(R\)</span> on the curve<ul>
+<li>The point has coordinates <span class="arithmatex">\((R_x, R_y)\)</span> (mod <span class="arithmatex">\(p\)</span>)</li>
+<li>It's computationally infeasible to go back from <span class="arithmatex">\(R\)</span> to <span class="arithmatex">\(k\)</span>.</li>
+</ul>
+</li>
+<li>Note that <span class="arithmatex">\(n &lt; p\)</span>, otherwise <span class="arithmatex">\(r\)</span> would just be <span class="arithmatex">\(R_x\)</span>.</li>
+</ul>
+<p>Since <span class="arithmatex">\(d\)</span> is the private key, then <span class="arithmatex">\(dG\)</span> is the public key. We'll call it <span class="arithmatex">\(Q\)</span>.</p>
+<h2 id="verifying-the-signature">Verifying the signature</h2>
+<p>Given <span class="arithmatex">\(r\)</span>, <span class="arithmatex">\(s\)</span>, <span class="arithmatex">\(Q\)</span>, and the message, we can verify the signature by:</p>
+<ul>
+<li>hashing the message to get <span class="arithmatex">\(z\)</span></li>
+<li>recovering <span class="arithmatex">\(R\)</span></li>
+<li>checking that <span class="arithmatex">\(R_x\ \mathrm{mod \ n} = r\)</span></li>
+</ul>
+<p>We know that <span class="arithmatex">\(R = kG\)</span> and that <span class="arithmatex">\(s\)</span> contains <span class="arithmatex">\(k\)</span>, but in inverse form. If we invert <span class="arithmatex">\(s\)</span> and multiply it by <span class="arithmatex">\(G\)</span>, we get</p>
+<div class="arithmatex">\[s^{-1}G = (z+rd)^{-1}kG = (z+rd)^{-1}R\]</div>
+<p>Mhm... if we had <span class="arithmatex">\(d\)</span>, we could compute <span class="arithmatex">\((z+rd)\)</span> and use it to cancel <span class="arithmatex">\((z+rd)^{-1}\)</span> and get <span class="arithmatex">\(R\)</span>.</p>
+<p>While we don't have <span class="arithmatex">\(d\)</span>, we do have <span class="arithmatex">\(Q = dG\)</span>, which means that although we can't compute <span class="arithmatex">\((z + rd)\)</span>, we can compute <span class="arithmatex">\((z + rd)G\)</span>:</p>
+<div class="arithmatex">\[(z + rd)G = (zG + rQ)\]</div>
+<p>If we multiply that by <span class="arithmatex">\(s^{-1}\)</span> we get</p>
+<div class="arithmatex">\[s^{-1}(zG + rQ) = s^{-1}G(z+rd) = (z+rd)^{-1}R(z+rd) = R\]</div>
+<p>In words, we factor out <span class="arithmatex">\(G\)</span> from <span class="arithmatex">\(zG + rQ\)</span> and form <span class="arithmatex">\(s^{-1}G\)</span>, which is just <span class="arithmatex">\((z+rd)^{-1}R\)</span>, as we saw at the beginning.</p>
+<p>We did it! Now we check that <span class="arithmatex">\(r = R_x\ \mathrm{mod}\ n\)</span>.</p>
+<p>Here's the algorithm:</p>
+<ul>
+<li><span class="arithmatex">\(w = s^{-1}\ \mathrm{mod}\ n\)</span></li>
+<li><span class="arithmatex">\(u_1 = (z\cdot w)\ \mathrm{mod}\ n\)</span></li>
+<li><span class="arithmatex">\(u_2 = (r\cdot w)\ \mathrm{mod}\ n\)</span></li>
+<li><span class="arithmatex">\(R = u_1\cdot G + u_2\cdot Q\)</span></li>
+<li>check that <span class="arithmatex">\(r = R_x\ \mathrm{mod}\ n\)</span></li>
+</ul>
+<p>Observe that <span class="arithmatex">\(((zw)G + (rw)Q)\)</span> is more efficient than <span class="arithmatex">\(s^{-1}(zG + rQ)\)</span> because, in the former, <span class="arithmatex">\(w\)</span> multiplies two numbers, while, in the latter, <span class="arithmatex">\(s^{-1}\)</span> multiplies a point.</p>
+<h3 id="recovering-q">Recovering <span class="arithmatex">\(Q\)</span></h3>
+<p>Now the only problem is that in Ethereum the public key <span class="arithmatex">\(Q\)</span> doesn't come with the signature. However, we can recover it from <span class="arithmatex">\(r\)</span>, <span class="arithmatex">\(s\)</span>, and <span class="arithmatex">\(v\)</span>.</p>
+<p>As we know, <span class="arithmatex">\(Q = dG\)</span> and <span class="arithmatex">\(s = k^{-1}(z+rd)\)</span>, so we should try multiplying <span class="arithmatex">\(s\)</span> by <span class="arithmatex">\(G\)</span>:</p>
+<div class="arithmatex">\[sG = k^{-1}(z+rd)G = k^{-1}(zG + rQ)\]</div>
+<p>To solve for <span class="arithmatex">\(Q\)</span>, we need to get rid of that <span class="arithmatex">\(k^{-1}\)</span>. We can't just multiply <span class="arithmatex">\(sG\)</span> by <span class="arithmatex">\(k\)</span> because we don't know <span class="arithmatex">\(k\)</span>... but wait:</p>
+<div class="arithmatex">\[(zG + rQ) = ksG = s(kG) = sR\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[Q = r^{-1}(sR - zG)\]</div>
+<p>Unfortunately, we don't know <span class="arithmatex">\(R\)</span>. But can we recover it? We know <span class="arithmatex">\(r = R_x\)</span>, so we only need to recover <span class="arithmatex">\(R_y\)</span>, since <span class="arithmatex">\(R = (R_x, R_y)\)</span>. We're forgetting something, though: <span class="arithmatex">\(r = R_x\ \mathrm{mod}\ n\)</span>. Recall that the coordinates of the points on the curve are in <span class="arithmatex">\(\mathbb{Z}_p\)</span>, not <span class="arithmatex">\(\mathbb{Z}_n\)</span>. We need to recover the original <span class="arithmatex">\(R_x\)</span> from <span class="arithmatex">\(r\)</span>.</p>
+<p>We know that <span class="arithmatex">\(R_x \in \{0, \ldots, p-1\}\)</span>, and, apparently, <span class="arithmatex">\(n\)</span> is just a little smaller than <span class="arithmatex">\(p\)</span>, which means that <span class="arithmatex">\(R_x = r + jn\)</span> for some very small <span class="arithmatex">\(j\)</span>. We start from <span class="arithmatex">\(j = 0\)</span> and keep trying as long as <span class="arithmatex">\(r + jn &lt; p\)</span>. We say that <span class="arithmatex">\(r + jn\)</span> is a <em>candidate</em> for <span class="arithmatex">\(R_x\)</span>. Let's call the current candidate simply <span class="arithmatex">\(x\)</span>.</p>
+<p>Given <span class="arithmatex">\(x\)</span>, we can recover <span class="arithmatex">\(y\)</span> by using the equation <span class="arithmatex">\(y^2 = x^3 + 7\ (\mathrm{mod}\ p)\)</span> itself and solve for <span class="arithmatex">\(y\)</span>. There are fast algorithms to do that. If there's no solution, we try the next candidate. Otherwise, we get two possible solutions: <span class="arithmatex">\(y\)</span> and <span class="arithmatex">\(-y\)</span>. If you recall, <span class="arithmatex">\(v = R_y\ \mathrm{mod}\ 2\)</span>, which tells us the solution to pick:</p>
+<ul>
+<li>if <span class="arithmatex">\(y\ \mathrm{mod}\ 2 = v\)</span>, we choose <span class="arithmatex">\(y\)</span></li>
+<li>otherwise, we choose <span class="arithmatex">\(-y\)</span></li>
+</ul>
+<p>One might wonder why we preserve the least significant bit of <span class="arithmatex">\(R_y\)</span> to select the correct <span class="arithmatex">\(y\)</span>. That's because if <span class="arithmatex">\(y\)</span> is in <span class="arithmatex">\(\{0, \ldots, p-1\}\)</span>, then <span class="arithmatex">\(-y\ \mathrm{mod}\ p = p-y\)</span>. It's clear that <span class="arithmatex">\(y + (p-y) = p\)</span>, which is odd (being a big prime), which implies that only one of <span class="arithmatex">\(y\)</span> and <span class="arithmatex">\(-y\)</span> can be odd (or even) mod <span class="arithmatex">\(p\)</span>.</p>
+<p>Anyway, once we have <span class="arithmatex">\(R = (x, y)\)</span>, we compute <span class="arithmatex">\(Q = r^{-1}(sR - zG)\)</span>.</p>
+<p>Now we must check that <span class="arithmatex">\(Q\)</span> is valid, i.e. that <span class="arithmatex">\(Q\)</span> is on the curve. If it's not, then we try the next candidate.</p>
+<p>We should actually check that <span class="arithmatex">\(Q\)</span> is in <span class="arithmatex">\(G\)</span>, but, apparently, <span class="arithmatex">\(G\)</span> contains all the solutions of <span class="arithmatex">\(y^2 = x^3 + 7\ \mathrm{mod}\ p\)</span>, so if <span class="arithmatex">\(Q\)</span> is on the curve then it's also in <span class="arithmatex">\(G\)</span>.</p>
+<h2 id="signature-malleability-attack">Signature malleability attack</h2>
+<p>We left this for last, but after all we've been through, this is disappointingly straightforward.</p>
+<p>If <span class="arithmatex">\((r, s, v)\)</span> is a signature created by signing a message <span class="arithmatex">\(M\)</span> with a private key <span class="arithmatex">\(d\)</span>, then so is <span class="arithmatex">\((r, n-s, 1-v)\)</span>.</p>
+<p>That's it. The problem arises when someone blacklists <span class="arithmatex">\((r, s, v)\)</span> (once it's been used) believing that this will prevent double spending. An attacker will use the signature <span class="arithmatex">\((r, n-s, 1-v)\)</span> to send the same message for a second time, bypassing the blacklist.</p>
+<p>Instead, programs should use nonces contained directly in the messages and blacklist the nonces or the messages themselves.</p>
+<p>Let's see why both signatures are valid.</p>
+<p>Let's recall the signing algorithm:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>* Message to sign:
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>    z = 256-bit message digest
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>* Signature generation (in F_n, i.e. mod n):
+<a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>    k = rand_unif({1, ..., n-1})        # ephemeral nonce
+<a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a>    R = k * G = (R_x, R_y)
+<a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a>    r = R_x mod n                       # 1st component
+<a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a>    if r = 0, restart and choose a new k
+<a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a>    s = (k^{-1} * (z + r * d)) mod n    # 2nd component [d = account private key]
+<a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a>    if s = 0, restart and choose a new k
+<a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a>    v = R_y mod 2               # AKA recid, recovery_id, or is_y_odd
+<a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a>    signature = (r, s, v)
+</code></pre></div>
+<p>Now let's see what happens if we use <span class="arithmatex">\(-k\)</span> instead of <span class="arithmatex">\(k\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+k' &amp;= -k \\
+R' &amp;= k'G = -kG = -R = (R_x, p-R_y) \\
+r' &amp;= R'_x\ \mathrm{mod}\ n = R_x\ \mathrm{mod}\ n = r \\
+s' &amp;= (k'^{-1} (z + r'd))\ \mathrm{mod}\ n \\
+   &amp;= -(k^{-1}(z + rd))\ \mathrm{mod}\ n \\
+   &amp;= -(k^{-1}(z + rd)\ \mathrm{mod}\ n)\ \mathrm{mod}\ n \\
+   &amp;= -s\ \mathrm{mod}\ n \\
+   &amp;= n-s \\
+v' &amp;= R'_y\ \mathrm{mod}\ 2 = (p-R_y)\ \mathrm{mod}\ 2 = 1-v \\
+(r', s', v') &amp;= (r, n-s, 1-v) \\
+\end{align*}
+\]</div>
+<p>That is, given the signature computed with <span class="arithmatex">\(k\)</span>, we can trivially get the one computed with <span class="arithmatex">\(-k\)</span>.</p>
+<p>Basically, by using <span class="arithmatex">\(-k\)</span> instead of <span class="arithmatex">\(k\)</span>, we reflect <span class="arithmatex">\(R\)</span> across the X-axis and flip <span class="arithmatex">\(v\)</span> to signal that we switched the <span class="arithmatex">\(y\)</span> coordinate.</p>
+<h2 id="the-end">The end</h2>
+<p>I hope you enjoyed the ride and deepened your understanding of ECDSA as much as I did.</p>
+<p>If you spot any errors, you're welcome to open an issue or start a new discussion on GitHub, though the article's nature will remain as stated in the <a href="#not-your-typical-article">disclaimer</a>.</p>
+<p>I won't be revisiting this years later unless something truly significant comes up.</p>
+<p>Until next time!</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  <p>
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">
+      <img src="https://licensebuttons.net/l/by-nc/4.0/88x31.png" 
+           alt="CC BY-NC 4.0" style="height:31px; margin-right:8px;">
+    </a>
+    <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">
+      <img src="https://img.shields.io/badge/License-MIT-yellow.svg" 
+           alt="MIT License" style="height:31px;">
+    </a>
+  </p>
+  <p>
+    Text licensed under 
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>, 
+    code licensed under 
+    <a href="https://opensource.org/licenses/MIT">MIT</a>.
+  </p>
+  
+  <p>
+    Made with <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>
+  </p>
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.footer", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../../../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      
+        <script src="https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+      
+        <script src="../../../../javascripts/header.js"></script>
+      
+    
+  </body>
+</html>

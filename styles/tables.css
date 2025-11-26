@@ -1,0 +1,21 @@
+article table {
+  width: auto !important;
+}
+
+/* centers the scroll wrapper horizontally */
+article .md-typeset__table {
+  display: flex;
+  justify-content: center;
+}
+
+article table td,
+article table th {
+  min-width: auto !important;
+  border-right: rgb(50, 50, 50) solid 1px;
+}
+
+/* defaults to centering when `:----`, `----:`, and `:---:` aren't used */
+.md-typeset td:not([style]),
+.md-typeset th:not([style]) {
+  text-align: center !important;
+}

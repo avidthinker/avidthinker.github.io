@@ -1,0 +1,5 @@
+/* Brighten default foreground text */
+[data-md-color-scheme="slate"] {
+  --md-default-fg-color: #e8e8e8;   /* lighter gray for body text */
+  --md-default-fg-color--light: #f0f0f0; /* even lighter for headings */
+}
