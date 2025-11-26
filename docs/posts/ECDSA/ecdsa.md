@@ -1,6 +1,6 @@
 ---
 title: Understanding ECDSA
-date: 2024-11-20
+date: 2024-11-26
 
 tags:
   - attack
@@ -113,7 +113,7 @@ Note that `((n % 7) + 7) % 7` will give the representative in any language, sinc
 Observe that:
 
 * adding $7$ doesn't change the equivalence class
-* `(x % 7) % 7` is just `x % 7`. This property is called *idempotency* (*same power*): reapplying the operation doesn't increase the extent of the effect.
+* `(x % 7) % 7` is just `x % 7`. This property is called *idempotency* (*same power*): reapplying the operation doesn't increase the extent of the effect, i.e. it gives the same result.
 
 Instead of writing mod operators everywhere, we can say that we're computing mod $p$:
 
@@ -230,7 +230,7 @@ Since we can subtract repeatedly, we can also use the mod operator:
 
 $$\mathrm{GCD}(a, b) = \mathrm{GCD}(a\ \mathrm{mod}\ b, b\ \mathrm{mod}\ a)$$
 
-This way, we can reduce the two arguments very quickly.
+This way, we can reduce the two arguments very quickly. Note that in a real implementation we only need one `mod` per step, since one of the two has clearly no effect.
 
 Let's use it to compute $\mathrm{GCD}(784, 495)$:
 
@@ -404,13 +404,13 @@ I had no idea that the EA had such a connection with the Fibonacci numbers befor
 
 I want to find the *base* for the logarithm that appears in the time complexity of the EA and EEA algorithms.
 
-If we assume that Fibonacci numbers grow *exponentially*, then, for $i\to\infty$, we have $F_i\to b^i$:
+If we assume that Fibonacci numbers grow *exponentially*, i.e. $F_i\sim b^i$, then:
 
 $$
 \begin{align*}
 F_{i+2} &= F_{i+1} + F_i \\
-\downarrow\hspace{5pt} &\hspace{16pt}\downarrow\hspace{21pt} \downarrow \\
-b^{i+2} &= b^{i+1} \hspace{2pt}+ \hspace{1pt} b^i
+&\hspace{10pt}\Downarrow \\
+b^{i+2} &= b^{i+1} + b^i
 \end{align*}
 $$
 
@@ -493,7 +493,7 @@ $$
 P = \frac{(F_0 - F_1)x - F_0}{x^2 + x - 1}
 $$
 
-Since Fibonacci numbers starts with $0$ and $1$, let's substitute $F_0=0$ and $F_1=1$:
+Since Fibonacci numbers start with $0$ and $1$, let's substitute $F_0=0$ and $F_1=1$:
 
 $$
 P = \frac{-x}{x^2 + x - 1}
@@ -732,7 +732,7 @@ When we switch to mod $p$, things get complicated:
 
 To draw that picture I used $p = 97$, a small prime. The blue line is the continuous curve, while the dots are the solutions in $\mathbb{Z}_p\times\mathbb{Z}_p$. Note that those solutions are always finitely many because they lie on a $p\times p$ grid.
 
-This figure is only showing the upper right part (1st quadrant) of the previous one, so we can't see the symmetry of the continuous curve. Yet, the points in $\mathbb{Z}_p\times\mathbb{Z}_p$ show a new symmetry: they're reflected across the horizontal line $y = p/2$. That makes sense:
+This figure only shows the upper right part (1st quadrant) of the previous one, so we can't see the symmetry of the continuous curve. Yet, the points in $\mathbb{Z}_p\times\mathbb{Z}_p$ show a new symmetry: they're reflected across the horizontal line $y = p/2$. That makes sense:
 
 * $(x, y)$ lies on the continuous curve if and only if $(x, -y)$ also lies on it.
 * If $y\in\mathbb{Z}_p$, then $-y = p-y$.
@@ -833,7 +833,7 @@ When $P = Q$, the line through $P$ and $Q$ is taken to be the *tangent* to the c
 
 After all, the animation is continuous when the slope of the line is continuous, and the slope is continuous at a point when it's equal to its limit, i.e. the derivative, at that point.
 
-Here's a figure with a fixed point $P$ and secants through $P$ and several $Q_i$ points that converge to $P$. I chose a color map such that the closer a $Q_i$ is to $P$, the *bluer* is the secant through it, and the closer it is to the tangent at $P$
+Here's a figure with a fixed point $P$ and secants through $P$ and several $Q_i$ points that converge to $P$. I chose a color map such that the closer a $Q_i$ is to $P$, the *bluer* and the closer to the tangent at $P$ is the secant through it.
 
 ![Secants and tangents](__generated__/tangent.svg)
 
@@ -997,7 +997,7 @@ and do the substitution $(X, Y, Z) = (\lambda x, \lambda y, \lambda z)$:
 
 $$\lambda^2 y^2 = \lambda^3 x^3 + 7$$
 
-We want that to hold whenever $(x, y, z)$ is a solution, i.e. whenever $y^2 = x^3 + 7$. For that to happens, the equation must factorize as
+We want that to hold whenever $(x, y, z)$ is a solution, i.e. whenever $y^2 = x^3 + 7$. For that to happen, the equation must factorize as
 
 $$f(\lambda)(y^2 - x^3 - 7) = 0$$
 
@@ -1043,7 +1043,7 @@ Y^2 Z &= X^3 + 7Z^3
 \end{align*}
 $$
 
-One can also apply other projections. For instance, $x = X/Z^2$ and $y = Y/Z^3$ result in
+One can also apply other projections. For instance, $x = X/Z^2$ and $y = Y/Z^3$ lead to
 
 $$
 \begin{align*}
@@ -1124,7 +1124,7 @@ So, we have three groups of representatives:
 !!! tip
     ***You can safely skip this section!***
 
-Computing $m$, the angular coefficient of the line through the points $(x_1, y_1)$ and $(x_2, y_2)$, requires a division, which, mod $p$, is a relatively expensive operation (compared to simple additions and multiplications).
+Computing $m$, the slope of the line through the points $(x_1, y_1)$ and $(x_2, y_2)$, requires a division, which, mod $p$, is a relatively expensive operation (compared to simple additions and multiplications).
 
 Let's recall how to compute the point $(x_3, y_3) = (x_1, y_1) + (x_2, y_2)$, assuming $x_1\neq x_2$:
 
@@ -1268,7 +1268,7 @@ ECDSA uses the addition operation we defined above to generate a group from a pr
 
 $$G = \{0, G, 2G, 3G, \ldots, (N-1)G\}$$
 
-Notice that $G$ has only $N$ elements. Why? Because the points on the curve mod $p$ all lie on a $p\times p$ grid, so there are finitely many of them.
+Notice that $G$ has only a finite number of elements, which is to be expected since the points lie on a $p\times p$ grid, which contains $p^2$ distinct points at most.
 
 We start from $0$ and keep adding $G$ until we loop, i.e. we get a point that we've already seen. Let's assume this is our current list:
 
@@ -1277,8 +1277,6 @@ $$0, G, 2G, 3G, \ldots, kG, \ldots, hG$$
 We assume we've just looped, so the first $h$ elements are all distinct, and $hG = kG$, with $k < h$.
 
 We must have $0 = hG-kG = (h-k)G$. The only elements in the list that can be 0 are the first one and the last one. Since $h-k>0$, $(h-k)G$ must be the last element, so $h-k=h$, which gives $k=0$.
-
-This means that when we loop we restart from $0$, just like in $\mathbb{Z}_p$.
 
 So we end up with the following group:
 
@@ -1307,7 +1305,7 @@ So, we've got ourselves an *isomorphism* between groups:
 
 $$aG + bG = (a+b)G$$
 
-More formally, let's define $f: a\mapsto aG$, which is a *bijection*, i.e. a 1-1 correspondence between all the elements of $\mathbb{Z}_N$ and all the elements of $G$. This means that we can invert $f$ and use $f^{-1}$ to go the other direction (however computationally expensive it is to do).
+More formally, let's define $f: a\mapsto aG$, which is a *bijection*, i.e. a 1-1 mapping between all the elements of $\mathbb{Z}_N$ and all the elements of $G$. This means that we can invert $f$ and use $f^{-1}$ to go the other direction (however computationally expensive it is to do).
 
 Then the equation above can be rewritten as
 
@@ -1364,7 +1362,7 @@ Let's see:
 * $d$ is the private key of the account
 * $k^{-1}$ is the multiplicative inverse mod $n$, i.e. $k\cdot k^{-1} = 1\ (\mathrm{mod}\ n)$.
 
-Note that I wrote $F_n$ or, better, $\mathbb{F}_n$ instead of $\mathbb{Z}_n$ because the latter is actually a field. The coordinates we've been working with for all this time are in $\mathbb{Z}_p$, which is also a field. That's why I wrote "*some* 3D space" before: depending on which field we choose, we'll end up with a different 3D space.
+Note that I wrote $F_n$ or, better, $\mathbb{F}_n$ instead of $\mathbb{Z}_n$ because, when $n$ is prime, the latter is actually a field. The coordinates we've been working with for all this time are in $\mathbb{Z}_p$, which is also a field, since $p$ is prime. That's why I wrote "*some* 3D space" before: depending on which field we choose, we'll end up with a different 3D space.
 
 We basically already observed that $\mathbb{Z}_n$, with $n$ prime, is a *field*, but we never spelled it out.
 
@@ -1493,9 +1491,9 @@ We left this for last, but after all we've been through, this is disappointingly
 
 If $(r, s, v)$ is a signature created by signing a message $M$ with a private key $d$, then so is $(r, n-s, 1-v)$.
 
-That's it. The problem arises when someone blacklists $(r, s, v)$ (once it's been used) believing that's going to prevent double spending. An attacker will use the signature $(r, n-s, 1-v)$ to send the same message for a second time, bypassing the blacklist.
+That's it. The problem arises when someone blacklists $(r, s, v)$ (once it's been used) believing that this will prevent double spending. An attacker will use the signature $(r, n-s, 1-v)$ to send the same message for a second time, bypassing the blacklist.
 
-Instead, programs should use nonces contained directly in the messages and blacklist the nonces or the (hashes of the) messages themselves.
+Instead, programs should use nonces contained directly in the messages and blacklist the nonces or the messages themselves.
 
 Let's see why both signatures are valid.
 
@@ -1539,5 +1537,10 @@ Basically, by using $-k$ instead of $k$, we reflect $R$ across the X-axis and fl
 
 ## The end
 
-I hope you enjoyed the ride and deepened your understanding of ECDSA.
+I hope you enjoyed the ride and deepened your understanding of ECDSA as much as I did.
+
+If you spot any errors, you're welcome to open an issue or start a new discussion on GitHub, though the article's nature will remain as stated in the [disclaimer](#not-your-typical-article).
+
+I won't be revisiting this years later unless something truly significant comes up.
+
 Until next time!
