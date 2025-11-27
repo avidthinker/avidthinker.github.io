@@ -1257,7 +1257,7 @@ Note that the $P=Q$ case is handled similarly. Moreover, the same approach will 
 
 This is almost a philosophical observation. When we substitute $x$ with $X/Z$, we're *not* promoting $x$ to a fraction, but we're *reexpressing* it as a fraction, since they're assumed to be equal.
 
-For example, if $x$ is a simple integer in $\mathbb{Z}$ (without mod) and we replace it with $X/Z$ with $X$ and $Z$ also in $\mathbb{Z}$, then we're ranking up from integers to rational numbers, which is a promotion. Indeed, unless $X$ is divisible by $Z$ or we're willing to lose some information, we won't be able to go back to $x$ when the time comes.
+For example, if $x$ is a simple integer in $\mathbb{Z}$ (without mod) and we replace it with $X/Z$ where $X$ and $Z$ are also in $\mathbb{Z}$, then we're ranking up from integers to rational numbers, which is a promotion. Indeed, unless $X$ is divisible by $Z$ or we're willing to lose some information, we won't be able to go back to $x$ when the time comes.
 
 In the ECDSA case, though, $x$ is in $\mathbb{Z}_p$, with $p$ prime, so $X/Z$ is also in $\mathbb{Z}_p$: we're not promoting $x$ to something more, but just reexpressing it.
 
@@ -1281,7 +1281,7 @@ $$0, G, 2G, 3G, \ldots, kG, \ldots, hG$$
 
 We assume we've just looped, so the first $h$ elements are all distinct, and $hG = kG$, with $k < h$.
 
-We must have $0 = hG-kG = (h-k)G$. The only elements in the list that can be 0 are the first one and the last one. Since $h-k>0$, $(h-k)G$ must be the last element, so $h-k=h$, which gives $k=0$.
+We must have $0 = hG-kG = (h-k)G$. The only elements in the list that can be 0 are the first one and the last one. Since $h-k>0$, $(h-k)G$ must be the last element, so $h-k=h$, which gives $k=0$. This means that when we loop we restart from $0$.
 
 So we end up with the following group:
 
