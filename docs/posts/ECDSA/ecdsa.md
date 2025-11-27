@@ -375,7 +375,7 @@ Since our sequence is even faster, the number of steps is lower and all we can s
 
     For instance, $n = O(n^2)$ is correct, though in practice people often use $O$ when they really mean $\Theta$.
 
-    Moreover, $n = O(n^2)$ really means $n \in O(n^2)$, but the former denotation is more common than the latter.
+    Moreover, $n = O(n^2)$ really means $n \in O(n^2)$, but the former notation is more common than the latter.
 
 Can we think of a very slow sequence? But, of course! We can build it starting from the bottom and always choosing $M_i=1$:
 
@@ -505,7 +505,7 @@ $$
 P(x) = \sum_{i=0}^\infty \alpha_i x^i
 $$
 
-The coefficient $\alpha_i$ is bound to be a generic expression for $F_i$.
+The coefficient $\alpha_i$ is bound to be a general expression for $F_i$.
 
 How do we do that?
 
@@ -605,10 +605,12 @@ $$
 The solutions are
 
 $$
+\left\{
 \begin{align*}
 A = \frac{-c_1}{c_1-c_2} \\
 B = \frac{c_2}{c_1-c_2}
 \end{align*}
+\right.
 $$
 
 Therefore:
@@ -730,7 +732,7 @@ When we switch to mod $p$, things get complicated:
 
 ![elliptic curve mod p](__generated__/ec_mod_p.svg)
 
-To draw that picture I used $p = 97$, a small prime. The blue line is the continuous curve, while the dots are the solutions in $\mathbb{Z}_p\times\mathbb{Z}_p$. Note that those solutions are always finitely many because they lie on a $p\times p$ grid.
+To draw that picture I used $p = 97$, a small prime. The blue line is the continuous curve, while the dots are the solutions in $\mathbb{Z}_p\times\mathbb{Z}_p$. Note that those solutions must always be finitely many, since they lie on a $p\times p$ grid.
 
 This figure only shows the upper right part (1st quadrant) of the previous one, so we can't see the symmetry of the continuous curve. Yet, the points in $\mathbb{Z}_p\times\mathbb{Z}_p$ show a new symmetry: they're reflected across the horizontal line $y = p/2$. That makes sense:
 
@@ -820,11 +822,14 @@ Here's how it's done on the continuous version of the elliptic curve:
 
 ![sum of two points on elliptic curve](__generated__/ec_sum.svg)
 
-If $P$ and $Q$ are two points on the curve, then $P+Q$ is the reflection across the X-axis of the intersection between the curve and the line passing through $P$ and $Q$.
+**If $P$ and $Q$ are two points on the curve, then $P+Q$ is the reflection across the X-axis of the intersection between the curve and the line passing through $P$ and $Q$.**
 
-Note that if $R = (x, y)$, then $-R = (x, -y)$. The names we chose suggest that $R + (-R) = 0$, which is correct.
+The line through $P$ and $Q$ always intersects the curve at a third point, except when the line is perfectly vertical. In that case, the line is said to intersect the curve at $0$, called the *point at infinity*. The point $0$ acts as the identity, but is not really part of the curve, so it needs to be handled as a special case.
 
-The line through $P$ and $Q$ always intersects the curve in a third point, except when the line is perfectly vertical. In that case, the line is said to intersect the curve at $0$, called the "point at infinity". The point $0$ acts as the identity, but is not really part of the curve, so it needs to be handled as a special case. Now, observe that the line through $R$ and $-R$ is vertical, so $R+(-R)=0$, as foreshadowed.
+Now, observe that the line through $R = (x, y)$ and $-R = (x, -y)$ is vertical, so $R+(-R)=0$, as suggested by the "$-$" sign.
+
+!!! note
+    Usually, the *point at infinity* is denoted by $\mathcal{O}$ and the origin by $0 = (0, 0)$. However, since we have no need for the origin in this context, we'll denote the point at infinity by $0$, stressing the fact that it's the *zero* of the group.
 
 When $P = Q$, the line through $P$ and $Q$ is taken to be the *tangent* to the curve at $P$ (or, equivalently, $Q$). It makes sense:
 
@@ -833,7 +838,7 @@ When $P = Q$, the line through $P$ and $Q$ is taken to be the *tangent* to the c
 
 After all, the animation is continuous when the slope of the line is continuous, and the slope is continuous at a point when it's equal to its limit, i.e. the derivative, at that point.
 
-Here's a figure with a fixed point $P$ and secants through $P$ and several $Q_i$ points that converge to $P$. I chose a color map such that the closer a $Q_i$ is to $P$, the *bluer* and the closer to the tangent at $P$ is the secant through it.
+Here's a figure with a fixed point $P$ and secants through $P$ and several $Q_i$ points that converge to $P$. I chose a color map such that the closer a $Q_i$ is to $P$, the *bluer* the secant through it becomes.
 
 ![Secants and tangents](__generated__/tangent.svg)
 
@@ -957,7 +962,7 @@ The correct rule will look less asymmetric if we think of it as $P+Q+R=0$, which
 * $P+R=-Q$
 * $Q+R=-P$
 
-But what about this point "at infinity"? Where does it come from? All I know is that it has to do with the so-called *projective space*.
+But what about this point at infinity? Where does it come from? All I know is that it has to do with the so-called *projective space*.
 
 I got somewhat acquainted with that space when I was doing 3D graphics. In 3D, we may add a 4th coordinate, so that $(x, y, z)$ is represented by $(wx, wy, wz, w)$ and some computations become more regular (i.e. with fewer exceptions). At the end, we divide by $w$ to go back to the usual coordinates.
 
@@ -1056,11 +1061,11 @@ $$
 
 This is actually nicer and used to greatly speed up computations. It's called *Jacobian projection*.
 
-We still haven't solved the mystery of the so-called "point at infinity". That was the main reason why we decided to explore projective spaces.
+We still haven't solved the mystery of the point at infinity. That was the main reason why we decided to explore projective spaces.
 
 #### Point at infinity
 
-We know that a vertical line intersects the planar elliptic curve either at no points at all or at the points $P$, $-P$, and $0$ for some point $P$, where $0$ is the so-called "point at infinity". Let's try to make sense of it.
+We know that a vertical line intersects the planar elliptic curve either at no points at all or at the points $P$, $-P$, and $0$ for some point $P$, where $0$ is the so-called *point at infinity*. Let's try to make sense of it.
 
 On the plane, a vertical line has equation $x = k$, but in our projective space that's the equation of a plane. Like with the elliptic curve, we want to upgrade the equation so that if $(x, y, z)$ is on the line, then so is $(\lambda x, \lambda y, \lambda z)$. We use the same substitution as before:
 
