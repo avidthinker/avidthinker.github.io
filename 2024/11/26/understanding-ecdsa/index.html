@@ -1087,7 +1087,7 @@ d  = v\cdot \mathrm{GCD}(d, d') \\
 <p class="admonition-title">Note</p>
 <p>Technically, <span class="arithmatex">\(\Theta\)</span> denotes <em>exact growth</em>, <span class="arithmatex">\(O\)</span> denotes an <em>upper bound</em>, and <span class="arithmatex">\(\Omega\)</span> denotes a <em>lower bound</em>.</p>
 <p>For instance, <span class="arithmatex">\(n = O(n^2)\)</span> is correct, though in practice people often use <span class="arithmatex">\(O\)</span> when they really mean <span class="arithmatex">\(\Theta\)</span>.</p>
-<p>Moreover, <span class="arithmatex">\(n = O(n^2)\)</span> really means <span class="arithmatex">\(n \in O(n^2)\)</span>, but the former denotation is more common than the latter.</p>
+<p>Moreover, <span class="arithmatex">\(n = O(n^2)\)</span> really means <span class="arithmatex">\(n \in O(n^2)\)</span>, but the former notation is more common than the latter.</p>
 </div>
 <p>Can we think of a very slow sequence? But, of course! We can build it starting from the bottom and always choosing <span class="arithmatex">\(M_i=1\)</span>:</p>
 <div class="arithmatex">\[
@@ -1254,7 +1254,7 @@ P = \frac{-x}{x^2 + x - 1}
 <div class="arithmatex">\[
 P(x) = \sum_{i=0}^\infty \alpha_i x^i
 \]</div>
-<p>The coefficient <span class="arithmatex">\(\alpha_i\)</span> is bound to be a generic expression for <span class="arithmatex">\(F_i\)</span>.</p>
+<p>The coefficient <span class="arithmatex">\(\alpha_i\)</span> is bound to be a general expression for <span class="arithmatex">\(F_i\)</span>.</p>
 <p>How do we do that?</p>
 <p>Let's take the simplest power series we can think of and find both the explicit and implicit forms for it:</p>
 <div class="arithmatex">\[
@@ -1328,10 +1328,12 @@ c_2 A + c_1 B = 0
 \]</div>
 <p>The solutions are</p>
 <div class="arithmatex">\[
+\left\{
 \begin{align*}
 A = \frac{-c_1}{c_1-c_2} \\
 B = \frac{c_2}{c_1-c_2}
 \end{align*}
+\right.
 \]</div>
 <p>Therefore:</p>
 <div class="arithmatex">\[
@@ -1412,7 +1414,7 @@ F_i = \frac{(1+\sqrt5)^i-(1-\sqrt5)^i}{2^i\sqrt5}
 <p>The continuous elliptic curve is the set of all points <span class="arithmatex">\((x, y)\)</span> in the plane such that <span class="arithmatex">\(y^2 = x^3 + 7\)</span>. Because <span class="arithmatex">\(y\)</span> is squared, the curve is symmetric about the X-axis, i.e. <span class="arithmatex">\((x, y)\)</span> is on the curve if and only if <span class="arithmatex">\((x, -y)\)</span> is.</p>
 <p>When we switch to mod <span class="arithmatex">\(p\)</span>, things get complicated:</p>
 <p><img alt="elliptic curve mod p" src="../../../../ECDSA/__generated__/ec_mod_p.svg"/></p>
-<p>To draw that picture I used <span class="arithmatex">\(p = 97\)</span>, a small prime. The blue line is the continuous curve, while the dots are the solutions in <span class="arithmatex">\(\mathbb{Z}_p\times\mathbb{Z}_p\)</span>. Note that those solutions are always finitely many because they lie on a <span class="arithmatex">\(p\times p\)</span> grid.</p>
+<p>To draw that picture I used <span class="arithmatex">\(p = 97\)</span>, a small prime. The blue line is the continuous curve, while the dots are the solutions in <span class="arithmatex">\(\mathbb{Z}_p\times\mathbb{Z}_p\)</span>. Note that those solutions must always be finitely many, since they lie on a <span class="arithmatex">\(p\times p\)</span> grid.</p>
 <p>This figure only shows the upper right part (1st quadrant) of the previous one, so we can't see the symmetry of the continuous curve. Yet, the points in <span class="arithmatex">\(\mathbb{Z}_p\times\mathbb{Z}_p\)</span> show a new symmetry: they're reflected across the horizontal line <span class="arithmatex">\(y = p/2\)</span>. That makes sense:</p>
 <ul>
 <li><span class="arithmatex">\((x, y)\)</span> lies on the continuous curve if and only if <span class="arithmatex">\((x, -y)\)</span> also lies on it.</li>
@@ -1478,16 +1480,20 @@ x &amp;= y
 <p>ECDSA defines a group over the points on the curve mod <span class="arithmatex">\(p\)</span>. To do that, we first need to define an addition between points.</p>
 <p>Here's how it's done on the continuous version of the elliptic curve:</p>
 <p><img alt="sum of two points on elliptic curve" src="../../../../ECDSA/__generated__/ec_sum.svg"/></p>
-<p>If <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> are two points on the curve, then <span class="arithmatex">\(P+Q\)</span> is the reflection across the X-axis of the intersection between the curve and the line passing through <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span>.</p>
-<p>Note that if <span class="arithmatex">\(R = (x, y)\)</span>, then <span class="arithmatex">\(-R = (x, -y)\)</span>. The names we chose suggest that <span class="arithmatex">\(R + (-R) = 0\)</span>, which is correct.</p>
-<p>The line through <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> always intersects the curve in a third point, except when the line is perfectly vertical. In that case, the line is said to intersect the curve at <span class="arithmatex">\(0\)</span>, called the "point at infinity". The point <span class="arithmatex">\(0\)</span> acts as the identity, but is not really part of the curve, so it needs to be handled as a special case. Now, observe that the line through <span class="arithmatex">\(R\)</span> and <span class="arithmatex">\(-R\)</span> is vertical, so <span class="arithmatex">\(R+(-R)=0\)</span>, as foreshadowed.</p>
+<p><strong>If <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> are two points on the curve, then <span class="arithmatex">\(P+Q\)</span> is the reflection across the X-axis of the intersection between the curve and the line passing through <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span>.</strong></p>
+<p>The line through <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> always intersects the curve at a third point, except when the line is perfectly vertical. In that case, the line is said to intersect the curve at <span class="arithmatex">\(0\)</span>, called the <em>point at infinity</em>. The point <span class="arithmatex">\(0\)</span> acts as the identity, but is not really part of the curve, so it needs to be handled as a special case.</p>
+<p>Now, observe that the line through <span class="arithmatex">\(R = (x, y)\)</span> and <span class="arithmatex">\(-R = (x, -y)\)</span> is vertical, so <span class="arithmatex">\(R+(-R)=0\)</span>, as suggested by the "<span class="arithmatex">\(-\)</span>" sign.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Usually, the <em>point at infinity</em> is denoted by <span class="arithmatex">\(\mathcal{O}\)</span> and the origin by <span class="arithmatex">\(0 = (0, 0)\)</span>. However, since we have no need for the origin in this context, we'll denote the point at infinity by <span class="arithmatex">\(0\)</span>, stressing the fact that it's the <em>zero</em> of the group.</p>
+</div>
 <p>When <span class="arithmatex">\(P = Q\)</span>, the line through <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> is taken to be the <em>tangent</em> to the curve at <span class="arithmatex">\(P\)</span> (or, equivalently, <span class="arithmatex">\(Q\)</span>). It makes sense:</p>
 <ul>
 <li>Just imagine fixing <span class="arithmatex">\(P\)</span> and sliding <span class="arithmatex">\(Q\)</span> along the curve from one side of <span class="arithmatex">\(P\)</span> to the other.</li>
 <li>If we want the animation of the line during the sliding to be continuous, the line must be the tangent when <span class="arithmatex">\(P = Q\)</span>.</li>
 </ul>
 <p>After all, the animation is continuous when the slope of the line is continuous, and the slope is continuous at a point when it's equal to its limit, i.e. the derivative, at that point.</p>
-<p>Here's a figure with a fixed point <span class="arithmatex">\(P\)</span> and secants through <span class="arithmatex">\(P\)</span> and several <span class="arithmatex">\(Q_i\)</span> points that converge to <span class="arithmatex">\(P\)</span>. I chose a color map such that the closer a <span class="arithmatex">\(Q_i\)</span> is to <span class="arithmatex">\(P\)</span>, the <em>bluer</em> and the closer to the tangent at <span class="arithmatex">\(P\)</span> is the secant through it.</p>
+<p>Here's a figure with a fixed point <span class="arithmatex">\(P\)</span> and secants through <span class="arithmatex">\(P\)</span> and several <span class="arithmatex">\(Q_i\)</span> points that converge to <span class="arithmatex">\(P\)</span>. I chose a color map such that the closer a <span class="arithmatex">\(Q_i\)</span> is to <span class="arithmatex">\(P\)</span>, the <em>bluer</em> the secant through it becomes.</p>
 <p><img alt="Secants and tangents" src="../../../../ECDSA/__generated__/tangent.svg"/></p>
 <p>By the way, we still count the tangent line as intersecting the elliptic curve in three points, with two coinciding at the point of tangency.</p>
 <p>But how is it possible that even an "almost vertical" line through two points on the curve always intersects the curve at a third point? Such a line intersects the curve either at a point towards <span class="arithmatex">\((+\infty, +\infty)\)</span> or <span class="arithmatex">\((+\infty, -\infty)\)</span>.</p>
@@ -1581,7 +1587,7 @@ x_{-R} &amp;= m^2 - x_P - x_Q
 <li><span class="arithmatex">\(P+R=-Q\)</span></li>
 <li><span class="arithmatex">\(Q+R=-P\)</span></li>
 </ul>
-<p>But what about this point "at infinity"? Where does it come from? All I know is that it has to do with the so-called <em>projective space</em>.</p>
+<p>But what about this point at infinity? Where does it come from? All I know is that it has to do with the so-called <em>projective space</em>.</p>
 <p>I got somewhat acquainted with that space when I was doing 3D graphics. In 3D, we may add a 4th coordinate, so that <span class="arithmatex">\((x, y, z)\)</span> is represented by <span class="arithmatex">\((wx, wy, wz, w)\)</span> and some computations become more regular (i.e. with fewer exceptions). At the end, we divide by <span class="arithmatex">\(w\)</span> to go back to the usual coordinates.</p>
 <p>There's also the 2D case when we project a 3D scene onto a 2D screen: <span class="arithmatex">\(\pi(x, y, z) = (x/z, y/z)\)</span>, where I used <span class="arithmatex">\(\pi\)</span> for <em>projection</em>. This has to do with how we perceive the world, so that the farther an object is from us, the smaller it looks (assuming, from our POV, that <span class="arithmatex">\(z\)</span> is the distance of the object from us).</p>
 <h3 id="projective-space">Projective space</h3>
@@ -1646,9 +1652,9 @@ Y^2 &amp;= X^3 + 7Z^6
 \end{align*}
 \]</div>
 <p>This is actually nicer and used to greatly speed up computations. It's called <em>Jacobian projection</em>.</p>
-<p>We still haven't solved the mystery of the so-called "point at infinity". That was the main reason why we decided to explore projective spaces.</p>
+<p>We still haven't solved the mystery of the point at infinity. That was the main reason why we decided to explore projective spaces.</p>
 <h4 id="point-at-infinity">Point at infinity</h4>
-<p>We know that a vertical line intersects the planar elliptic curve either at no points at all or at the points <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(-P\)</span>, and <span class="arithmatex">\(0\)</span> for some point <span class="arithmatex">\(P\)</span>, where <span class="arithmatex">\(0\)</span> is the so-called "point at infinity". Let's try to make sense of it.</p>
+<p>We know that a vertical line intersects the planar elliptic curve either at no points at all or at the points <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(-P\)</span>, and <span class="arithmatex">\(0\)</span> for some point <span class="arithmatex">\(P\)</span>, where <span class="arithmatex">\(0\)</span> is the so-called <em>point at infinity</em>. Let's try to make sense of it.</p>
 <p>On the plane, a vertical line has equation <span class="arithmatex">\(x = k\)</span>, but in our projective space that's the equation of a plane. Like with the elliptic curve, we want to upgrade the equation so that if <span class="arithmatex">\((x, y, z)\)</span> is on the line, then so is <span class="arithmatex">\((\lambda x, \lambda y, \lambda z)\)</span>. We use the same substitution as before:</p>
 <div class="arithmatex">\[
 \begin{align*}
