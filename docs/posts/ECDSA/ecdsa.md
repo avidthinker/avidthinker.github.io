@@ -1380,7 +1380,7 @@ A field $\mathbb{F}$ is a set equipped with two binary operations, addition and 
 * A distributive law holds:
     * (a+b)c = ac + bc
 
-Note that $\mathbb{F}\setminus\{0\}$ means "$\mathbb{F}$ minus $0$", i.e. $\mathbb{F}$ without the element $0$.
+Note that $\mathbb{F}\setminus\{0\}$ means "$\mathbb{F}$ minus $\{0\}$", i.e. $\mathbb{F}$ without the element $0$.
 
 $\mathbb{Z}_n\setminus\{0\}$, with $n$ prime, is a group under multiplication because:
 
