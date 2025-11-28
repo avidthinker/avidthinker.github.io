@@ -22,7 +22,7 @@ I expect you to be familiar with *Public Key Cryptography* and how it can be use
 
 You'll only need to know basic math, so *abstract algebra* is *not* a requirement. I'll introduce the bare minimum as we go. My exposition will be deliberately *unsophisticated*, favoring *ease of understanding* over *conciseness* and *elegance*.
 
-The reader I have in mind is someone who's dissatisfied with the many superficial or hand-wavy explanations of how ECDSA works that are floating around the internet, but, at the same time, doesn't have the time or interest to go all the way down the rabbit hole and learn cryptography in a thorough and systematic way.
+The reader I have in mind is someone dissatisfied with the many superficial, hand-wavy explanations of ECDSA often found in articles and books aimed at developers and auditors, but who doesn't have the time or interest to go all the way down the rabbit hole and learn cryptography in a thorough and systematic way.
 
 If you, like me, work in a field where you need to have a working knowledge of multiple disciplines, you'll probably appreciate this kind of compromise.
 
