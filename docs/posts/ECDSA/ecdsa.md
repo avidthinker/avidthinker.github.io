@@ -50,16 +50,13 @@ That should explain why *I* wrote it, but why should *you* read it?
 
 Well, you get to read something:
 
-* *Unusual*, which might pique your curiosity,
-* *Non-authoritative*, demanding your full attention and critical thinking to spot inconsistencies,
-* *Constructive* in nature, since most of the formulas and derivations have to be recreated from scratch,
-* *Non-standard*, which might or might not please you:
-    * facts may be stated or named differently from official literature,
-* *Naive*, as I observe and notice some connections for the first time,
-    * possibly making my exposition more engaging but also less polished,
+* *Constructive* in nature, since most of the formulas and derivations have to be recreated from scratch.
 * *Insightful*, since I share some of my intuition and mental models, which is somewhat unusual in more rigorous settings.
+* *Naive*, as I observe and notice some connections for the first time, possibly making my exposition more engaging but also less polished.
+* *Non-authoritative*, demanding your full attention and critical thinking to spot inconsistencies.
+* *Non-standard*, since some facts may be stated or named differently from official literature.
 
-Your role is that of an *auditor* or *verifier*, constantly trying to find any inconsistencies and *non sequiturs* in what I produced: I'm the *generator* and you the *discriminator*. In a (constructively) *adversarial* setting, this would be an *iterative* process.
+Your role is that of an *auditor* or *verifier*, constantly trying to find any inconsistencies and *non sequiturs* in what I wrote: I'm the *generator* and you the *discriminator*. In a (constructively) *adversarial* setting, this would be an *iterative* process.
 
 It goes without saying that this article is meant to be read *linearly*, from the start.
 
