@@ -2019,7 +2019,7 @@ v' &amp;= R'_y\ \mathrm{mod}\ 2 = (p-R_y)\ \mathrm{mod}\ 2 = 1-v \\
 <p>Basically, by using <span class="arithmatex">\(-k\)</span> instead of <span class="arithmatex">\(k\)</span>, we reflect <span class="arithmatex">\(R\)</span> across the X-axis and flip <span class="arithmatex">\(v\)</span> to signal that we switched the <span class="arithmatex">\(y\)</span> coordinate.</p>
 <h2 id="the-end">The end</h2>
 <p>I hope you enjoyed the ride and deepened your understanding of ECDSA as much as I did.</p>
-<p>If you spot any errors, you're welcome to open an issue or start a new discussion on GitHub, though the article's nature will remain as stated in the <a href="#not-your-typical-article">disclaimer</a>.</p>
+<p>If you spot any errors, you're welcome to open an issue or leave a comment below, but keep in mind that the article's nature will remain as stated in the <a href="#not-your-typical-article">disclaimer</a>.</p>
 <p>I won't be revisiting this years later unless something truly significant comes up.</p>
 <p>Until next time!</p>
 
@@ -2038,6 +2038,58 @@ v' &amp;= R'_y\ \mathrm{mod}\ 2 = (p-R_y)\ \mathrm{mod}\ 2 = 1-v \\
   
 
 
+
+<h2 id="__comments">Comments</h2>
+<script
+  src="https://giscus.app/client.js"
+  data-repo="avidthinker/avidthinker.github.io"
+  data-repo-id="R_kgDOQciD5g"
+  data-category="Comments"
+  data-category-id="DIC_kwDOQciD5s4CzTAG"
+  data-mapping="pathname"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme="preferred_color_scheme"
+  data-lang="en"
+  data-loading="lazy"
+  crossorigin="anonymous"
+  async
+></script>
+
+<!-- Synchronize Giscus theme with palette -->
+<script>
+  var giscus = document.querySelector("script[src*=giscus]");
+
+  // Set palette on initial load
+  var palette = __md_get("__palette");
+  if (palette && typeof palette.color === "object") {
+    var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+
+    // Instruct Giscus to set theme
+    giscus.setAttribute("data-theme", theme);
+  }
+
+  // Register event handlers after documented loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    var ref = document.querySelector("[data-md-component=palette]");
+    ref.addEventListener("change", function () {
+      var palette = __md_get("__palette");
+      if (palette && typeof palette.color === "object") {
+        var theme =
+          palette.color.scheme === "slate" ? "transparent_dark" : "light";
+
+        // Instruct Giscus to change theme
+        var frame = document.querySelector(".giscus-frame");
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme } } },
+          "https://giscus.app"
+        );
+      }
+    });
+  });
+</script>
 
       
     </article>
