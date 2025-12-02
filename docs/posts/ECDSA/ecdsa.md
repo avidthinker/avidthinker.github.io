@@ -1541,7 +1541,7 @@ Basically, by using $-k$ instead of $k$, we reflect $R$ across the X-axis and fl
 
 I hope you enjoyed the ride and deepened your understanding of ECDSA as much as I did.
 
-If you spot any errors, you're welcome to open an issue or start a new discussion on GitHub, though the article's nature will remain as stated in the [disclaimer](#not-your-typical-article).
+If you spot any errors, you're welcome to open an issue or leave a comment below, but keep in mind that the article's nature will remain as stated in the [disclaimer](#not-your-typical-article).
 
 I won't be revisiting this years later unless something truly significant comes up.
 
