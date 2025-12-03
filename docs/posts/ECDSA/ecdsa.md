@@ -1064,7 +1064,7 @@ We still haven't solved the mystery of the point at infinity. That was the main 
 
 We know that a vertical line intersects the planar elliptic curve either at no points at all or at the points $P$, $-P$, and $0$ for some point $P$, where $0$ is the so-called *point at infinity*. Let's try to make sense of it.
 
-On the plane, a vertical line has equation $x = k$, but in our projective space that's the equation of a plane. Like with the elliptic curve, we want to upgrade the equation so that if $(x, y, z)$ is on the line, then so is $(\lambda x, \lambda y, \lambda z)$. We use the same substitution as before:
+On the plane, a vertical line has equation $x = k$, but in our projective space that's the equation of a plane. Like with the elliptic curve, we want to upgrade the equation so that if $(x, y, z)$ is on the line, then so is $(\lambda x, \lambda y, \lambda z)$ for $\lambda\neq 0$. We use the same substitution as before:
 
 $$
 \begin{align*}
