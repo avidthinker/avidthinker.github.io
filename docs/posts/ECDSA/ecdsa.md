@@ -195,7 +195,7 @@ Technically, the set of representatives $0, \ldots, p-1$ is often denoted by $\m
 ### Extended Euclidean algorithm
 
 !!! tip
-    ***You can safely skip this section***, if you already know or don't care about how the multiplicative inverse can be computed in practice. If you're interested in the method of *generating functions* you might still want to read the [Fibonacci numbers](#fibonacci-numbers) subsection, though.
+    ***You can safely [skip](#secp256k1) this section***, if you already know or don't care about how the multiplicative inverse can be computed in practice. If you're interested in the method of *generating functions* you might still want to read the [Fibonacci numbers](#fibonacci-numbers) subsection, though.
 
 For a fast and practical way to compute the multiplicative inverse, we can use the *extended Euclidean algorithm* (EEA).
 
@@ -397,7 +397,7 @@ I had no idea that the EA had such a connection with the Fibonacci numbers befor
 #### Fibonacci numbers
 
 !!! tip
-    ***You can safely skip this section***. You don't need it for the rest of the article, but if you want to learn about *generating functions*, I think this is a good opportunity.
+    ***You can safely [skip](#secp256k1) this section***. You don't need it for the rest of the article, but if you want to learn about *generating functions*, I think this is a good opportunity.
 
 I want to find the *base* for the logarithm that appears in the time complexity of the EA and EEA algorithms.
 
@@ -1124,7 +1124,7 @@ So, we have three groups of representatives:
 #### Addition in projective space
 
 !!! tip
-    ***You can safely skip this section!***
+    ***You can safely [skip](#back-to-the-group) this section!***
 
 Computing $m$, the slope of the line through the points $(x_1, y_1)$ and $(x_2, y_2)$, requires a division, which, mod $p$, is a relatively expensive operation (compared to simple additions and multiplications).
 
