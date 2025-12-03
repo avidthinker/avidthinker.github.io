@@ -927,7 +927,7 @@
 <h3 id="extended-euclidean-algorithm">Extended Euclidean algorithm</h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><strong><em>You can safely skip this section</em></strong>, if you already know or don't care about how the multiplicative inverse can be computed in practice. If you're interested in the method of <em>generating functions</em> you might still want to read the <a href="#fibonacci-numbers">Fibonacci numbers</a> subsection, though.</p>
+<p><strong><em>You can safely <a href="#secp256k1">skip</a> this section</em></strong>, if you already know or don't care about how the multiplicative inverse can be computed in practice. If you're interested in the method of <em>generating functions</em> you might still want to read the <a href="#fibonacci-numbers">Fibonacci numbers</a> subsection, though.</p>
 </div>
 <p>For a fast and practical way to compute the multiplicative inverse, we can use the <em>extended Euclidean algorithm</em> (EEA).</p>
 <p>The Euclidean algorithm (EA) can be used to efficiently compute <span class="arithmatex">\(\mathrm{GCD}(a, p)\)</span>, and its extended version returns two integers <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> such that</p>
@@ -1101,7 +1101,7 @@ d  = v\cdot \mathrm{GCD}(d, d') \\
 <h4 id="fibonacci-numbers">Fibonacci numbers</h4>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><strong><em>You can safely skip this section</em></strong>. You don't need it for the rest of the article, but if you want to learn about <em>generating functions</em>, I think this is a good opportunity.</p>
+<p><strong><em>You can safely <a href="#secp256k1">skip</a> this section</em></strong>. You don't need it for the rest of the article, but if you want to learn about <em>generating functions</em>, I think this is a good opportunity.</p>
 </div>
 <p>I want to find the <em>base</em> for the logarithm that appears in the time complexity of the EA and EEA algorithms.</p>
 <p>If we assume that Fibonacci numbers grow <em>exponentially</em>, i.e. <span class="arithmatex">\(F_i\sim b^i\)</span>, then:</p>
@@ -1703,7 +1703,7 @@ X = kZ
 <h4 id="addition-in-projective-space">Addition in projective space</h4>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><strong><em>You can safely skip this section!</em></strong></p>
+<p><strong><em>You can safely <a href="#back-to-the-group">skip</a> this section!</em></strong></p>
 </div>
 <p>Computing <span class="arithmatex">\(m\)</span>, the slope of the line through the points <span class="arithmatex">\((x_1, y_1)\)</span> and <span class="arithmatex">\((x_2, y_2)\)</span>, requires a division, which, mod <span class="arithmatex">\(p\)</span>, is a relatively expensive operation (compared to simple additions and multiplications).</p>
 <p>Let's recall how to compute the point <span class="arithmatex">\((x_3, y_3) = (x_1, y_1) + (x_2, y_2)\)</span>, assuming <span class="arithmatex">\(x_1\neq x_2\)</span>:</p>
