@@ -945,6 +945,9 @@ A complete implementation will also handle the (trivial) edge cases with $P=0$ o
 
 ### Why reflect the intersection point
 
+!!! Note
+    In previous sections, we wrote $P+Q=R$, where $-R$ was the intersection point and $R$ its reflection, i.e. the final result. However, in this section, and only in this section, we assume that $P$, $Q$, and $R$ are on the same line, so the intersection must be called $R$ and its reflection $-R$. The same goes for $P$ and $Q$.
+
 Having to reflect the intersection point might seem a little arbitrary at first, but if we think about it, not reflecting it is problematic. Indeed, since the three points lie on the same line, without reflection all the following equations would hold:
 
 * $P + Q = R$
@@ -959,13 +962,13 @@ The correct rule will look less asymmetric if we think of it as $P+Q+R=0$, which
 * $P+R=-Q$
 * $Q+R=-P$
 
-But what about this point at infinity? Where does it come from? All I know is that it has to do with the so-called *projective space*.
+### Projective space
+
+What about the point at infinity? Where does it come from? All I know is that it has to do with the so-called *projective space*.
 
 I got somewhat acquainted with that space when I was doing 3D graphics. In 3D, we may add a 4th coordinate, so that $(x, y, z)$ is represented by $(wx, wy, wz, w)$ and some computations become more regular (i.e. with fewer exceptions). At the end, we divide by $w$ to go back to the usual coordinates.
 
 There's also the 2D case when we project a 3D scene onto a 2D screen: $\pi(x, y, z) = (x/z, y/z)$, where I used $\pi$ for *projection*. This has to do with how we perceive the world, so that the farther an object is from us, the smaller it looks (assuming, from our POV, that $z$ is the distance of the object from us).
-
-### Projective space
 
 Let's say we have some 3D space. We make it projective by imposing that, in general, $(x, y, z) \sim (\lambda x, \lambda y, \lambda z)$ for all $\lambda\neq 0$, and $(x, y, z)\neq(0, 0, 0)$, where $\sim$ means *equivalent*. In words, *all non-zero scalings of a non-zero point are equivalent*. Those are all the points, origin excluded, on the same line through the origin.
 
