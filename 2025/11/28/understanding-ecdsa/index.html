@@ -1567,6 +1567,10 @@ x_{-R} &amp;= m^2 - x_P - x_Q
 <p>That's our <span class="arithmatex">\(m\)</span>.</p>
 <p>A complete implementation will also handle the (trivial) edge cases with <span class="arithmatex">\(P=0\)</span> or <span class="arithmatex">\(Q=0\)</span>, of course.</p>
 <h3 id="why-reflect-the-intersection-point">Why reflect the intersection point</h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In previous sections, we wrote <span class="arithmatex">\(P+Q=R\)</span>, where <span class="arithmatex">\(-R\)</span> was the intersection point and <span class="arithmatex">\(R\)</span> its reflection, i.e. the final result. However, in this section, and only in this section, we assume that <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(Q\)</span>, and <span class="arithmatex">\(R\)</span> are on the same line, so the intersection must be called <span class="arithmatex">\(R\)</span> and its reflection <span class="arithmatex">\(-R\)</span>. The same goes for <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span>.</p>
+</div>
 <p>Having to reflect the intersection point might seem a little arbitrary at first, but if we think about it, not reflecting it is problematic. Indeed, since the three points lie on the same line, without reflection all the following equations would hold:</p>
 <ul>
 <li><span class="arithmatex">\(P + Q = R\)</span></li>
@@ -1580,10 +1584,10 @@ x_{-R} &amp;= m^2 - x_P - x_Q
 <li><span class="arithmatex">\(P+R=-Q\)</span></li>
 <li><span class="arithmatex">\(Q+R=-P\)</span></li>
 </ul>
-<p>But what about this point at infinity? Where does it come from? All I know is that it has to do with the so-called <em>projective space</em>.</p>
+<h3 id="projective-space">Projective space</h3>
+<p>What about the point at infinity? Where does it come from? All I know is that it has to do with the so-called <em>projective space</em>.</p>
 <p>I got somewhat acquainted with that space when I was doing 3D graphics. In 3D, we may add a 4th coordinate, so that <span class="arithmatex">\((x, y, z)\)</span> is represented by <span class="arithmatex">\((wx, wy, wz, w)\)</span> and some computations become more regular (i.e. with fewer exceptions). At the end, we divide by <span class="arithmatex">\(w\)</span> to go back to the usual coordinates.</p>
 <p>There's also the 2D case when we project a 3D scene onto a 2D screen: <span class="arithmatex">\(\pi(x, y, z) = (x/z, y/z)\)</span>, where I used <span class="arithmatex">\(\pi\)</span> for <em>projection</em>. This has to do with how we perceive the world, so that the farther an object is from us, the smaller it looks (assuming, from our POV, that <span class="arithmatex">\(z\)</span> is the distance of the object from us).</p>
-<h3 id="projective-space">Projective space</h3>
 <p>Let's say we have some 3D space. We make it projective by imposing that, in general, <span class="arithmatex">\((x, y, z) \sim (\lambda x, \lambda y, \lambda z)\)</span> for all <span class="arithmatex">\(\lambda\neq 0\)</span>, and <span class="arithmatex">\((x, y, z)\neq(0, 0, 0)\)</span>, where <span class="arithmatex">\(\sim\)</span> means <em>equivalent</em>. In words, <em>all non-zero scalings of a non-zero point are equivalent</em>. Those are all the points, origin excluded, on the same line through the origin.</p>
 <p>The classes partition the <em>punctured</em> (i.e. without the origin) 3D space. The origin, if included, would be in its own singleton class <span class="arithmatex">\(\{0\}\)</span> anyway. If we instead allowed <span class="arithmatex">\(\lambda = 0\)</span>, then two points <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> on different lines through the origin would violate the equivalence relation: <span class="arithmatex">\(x\sim 0\)</span> and <span class="arithmatex">\(y\sim 0\)</span>, but <span class="arithmatex">\(x\nsim y\)</span>.</p>
 <p>Indeed, an equivalence relation must follow three rules:</p>
