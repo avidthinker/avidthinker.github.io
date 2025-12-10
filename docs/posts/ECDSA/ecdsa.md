@@ -811,6 +811,32 @@ $$G = \{0G, 1G, 2G, 3G, 4G, \ldots\}$$
 
 where we define $0G = 0$.
 
+### Multiplicative group
+
+Here's another definition of a group.
+
+A group $G$ is a set of elements equipped with a binary operation, $\cdot$, such that:
+
+* For any elements $a, b\in G$, we must have $a\cdot b \in G$.
+* There's a *neutral element*, or *identity*, $1$, so that $a\cdot 1 = 1\cdot a = a$ for every $a\in G$.
+* For every $a\in G$, there exists a *multiplicative inverse* of $a$, denoted as $a^{-1}$, such that $a\cdot a^{-1} = a^{-1}\cdot a = 1$.
+    * Note: $a\cdot b^{-1}$ may also be written as $a/b$, in certain contexts.
+* We also want *associativity*, i.e., for all $a,b,c\in G$, we must have $a\cdot (b\cdot c) = (a\cdot b) \cdot c$. So, we can drop the parentheses and write $a\cdot b\cdot c$.
+
+To write the new definition, I simply copied and pasted the previous one, and replaced:
+
+* $+$ with $\cdot$
+* $0$ with $1$
+* $-a$ with $a^{-1}$.
+
+I also tweaked the text a little, but that's it. The two definitions are perfectly equivalent, and the only difference is notational. Feel free to use any symbol you want for the operator, the identity or whatever...
+
+You should convince yourself that the real numbers form a group:
+
+* under addition (the usual $+$ operation)
+* under multiplication (the usual $\cdot$ operation)
+    * provided we exclude the element $0$, since $0$ has no multiplicative inverse.
+
 ## A group for the elliptic curve
 
 ECDSA defines a group over the points on the curve mod $p$. To do that, we first need to define an addition between points.
