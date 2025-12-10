@@ -478,6 +478,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Group">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiplicative-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiplicative group
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -655,7 +670,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
                           <span class="md-ellipsis">
                             
-                              45 min read
+                              46 min read
                             
                           </span>
                         </div>
@@ -1469,6 +1484,33 @@ x &amp;= y
 <p>or even</p>
 <div class="arithmatex">\[G = \{0G, 1G, 2G, 3G, 4G, \ldots\}\]</div>
 <p>where we define <span class="arithmatex">\(0G = 0\)</span>.</p>
+<h3 id="multiplicative-group">Multiplicative group</h3>
+<p>Here's another definition of a group.</p>
+<p>A group <span class="arithmatex">\(G\)</span> is a set of elements equipped with a binary operation, <span class="arithmatex">\(\cdot\)</span>, such that:</p>
+<ul>
+<li>For any elements <span class="arithmatex">\(a, b\in G\)</span>, we must have <span class="arithmatex">\(a\cdot b \in G\)</span>.</li>
+<li>There's a <em>neutral element</em>, or <em>identity</em>, <span class="arithmatex">\(1\)</span>, so that <span class="arithmatex">\(a\cdot 1 = 1\cdot a = a\)</span> for every <span class="arithmatex">\(a\in G\)</span>.</li>
+<li>For every <span class="arithmatex">\(a\in G\)</span>, there exists a <em>multiplicative inverse</em> of <span class="arithmatex">\(a\)</span>, denoted as <span class="arithmatex">\(a^{-1}\)</span>, such that <span class="arithmatex">\(a\cdot a^{-1} = a^{-1}\cdot a = 1\)</span>.<ul>
+<li>Note: <span class="arithmatex">\(a\cdot b^{-1}\)</span> may also be written as <span class="arithmatex">\(a/b\)</span>, in certain contexts.</li>
+</ul>
+</li>
+<li>We also want <em>associativity</em>, i.e., for all <span class="arithmatex">\(a,b,c\in G\)</span>, we must have <span class="arithmatex">\(a\cdot (b\cdot c) = (a\cdot b) \cdot c\)</span>. So, we can drop the parentheses and write <span class="arithmatex">\(a\cdot b\cdot c\)</span>.</li>
+</ul>
+<p>To write the new definition, I simply copied and pasted the previous one, and replaced:</p>
+<ul>
+<li><span class="arithmatex">\(+\)</span> with <span class="arithmatex">\(\cdot\)</span></li>
+<li><span class="arithmatex">\(0\)</span> with <span class="arithmatex">\(1\)</span></li>
+<li><span class="arithmatex">\(-a\)</span> with <span class="arithmatex">\(a^{-1}\)</span>.</li>
+</ul>
+<p>I also tweaked the text a little, but that's it. The two definitions are perfectly equivalent, and the only difference is notational. Feel free to use any symbol you want for the operator, the identity or whatever...</p>
+<p>You should convince yourself that the real numbers form a group:</p>
+<ul>
+<li>under addition (the usual <span class="arithmatex">\(+\)</span> operation)</li>
+<li>under multiplication (the usual <span class="arithmatex">\(\cdot\)</span> operation)<ul>
+<li>provided we exclude the element <span class="arithmatex">\(0\)</span>, since <span class="arithmatex">\(0\)</span> has no multiplicative inverse.</li>
+</ul>
+</li>
+</ul>
 <h2 id="a-group-for-the-elliptic-curve">A group for the elliptic curve</h2>
 <p>ECDSA defines a group over the points on the curve mod <span class="arithmatex">\(p\)</span>. To do that, we first need to define an addition between points.</p>
 <p>Here's how it's done on the continuous version of the elliptic curve:</p>
